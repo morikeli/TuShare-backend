@@ -1,5 +1,6 @@
 import os
 import shutil
+import uuid
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from sqlalchemy.orm import Session
 from database import SessionLocal
@@ -19,11 +20,20 @@ def get_db():
         db.close()
 
 @router.post("/signup/")
-def create_user(username: str, email: str, password: str, profile_image: UploadFile = File(...), db: Session = Depends(get_db)):
+def create_user(username: str, email: str, password: str, profile_image: UploadFile = File(None), db: Session = Depends(get_db)):
+    
     # Save the uploaded image to the server
-    image_path = os.path.join(UPLOAD_DIR, profile_image.filename)
-    with open(image_path, "wb") as image_file:
-        shutil.copyfileobj(profile_image.file, image_file)
+    image_path = None
+    # Handle optional image upload - check if the user has attached an image file in the frontend
+    if profile_image:
+        file_extension = os.path.splitext(profile_image.filename)[1]
+        unique_filename = f"{uuid.uuid4().hex}{file_extension}"
+        image_path = os.path.join(UPLOAD_DIR, unique_filename)
+
+        # Save the uploaded image
+        with open(image_path, "wb") as image_file:
+            shutil.copyfileobj(profile_image.file, image_file)
+
     
     hashed_password = get_password_hash(password)
     db_user = User(username=username, email=email, profile_image=image_path, hashed_password=hashed_password)
