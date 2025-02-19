@@ -1,13 +1,18 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from database import Base
+from datetime import datetime, timezone
 import uuid
+
 
 class User(Base):
     """ This is a user table  """
     __tablename__ = "users"
 
     id = Column(String, primary_key=True, index=True, default=lambda: str(uuid.uuid4().hex), unique=True)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
+    gender = Column(String, nullable=False)
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
     mobile_number = Column(String, unique=True, index=True)
@@ -18,6 +23,9 @@ class User(Base):
     home_address = Column(String, nullable=True)
     hashed_password = Column(String)
     profile_image = Column(String, nullable=True)
+    is_active = Column(Boolean, default=True)
+    last_login = Column(DateTime, nullable=True)
+    date_joined = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 
 class Ride(Base):
