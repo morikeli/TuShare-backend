@@ -47,7 +47,7 @@ def create_user(
 
     
     hashed_password = get_password_hash(password)
-    db_user = User(username=username, email=email, profile_image=image_path, hashed_password=hashed_password)
+    db_user = User(first_name=first_name, last_name=last_name, username=username, email=email, gender=gender, profile_image=image_path, hashed_password=hashed_password)
 
     try:
         db.add(db_user)
