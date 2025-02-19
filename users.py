@@ -56,8 +56,11 @@ def create_user(
         
         return {
             "id": db_user.id,
+            "first_name": db_user.first_name,
+            "last_name": db_user.last_name,
             "username": db_user.username,
             "email": db_user.email,
+            "gender": db_user.gender,
             "profile_image": db_user.profile_image,
             "home_address": db_user.home_address,
             "work_address": db_user.work_address,
