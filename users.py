@@ -43,7 +43,18 @@ def create_user(username: str, email: str, password: str, profile_image: UploadF
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
-        return db_user
+        
+        return {
+            "id": db_user.id,
+            "username": db_user.username,
+            "email": db_user.email,
+            "profile_image": db_user.profile_image,
+            "home_address": db_user.home_address,
+            "work_address": db_user.work_address,
+            "facebook_handle": db_user.facebook_handle,
+            "instagram_handle": db_user.instagram_handle,
+            "twitter_handle": db_user.twitter_handle
+        }
     
     except IntegrityError as e:
         db.rollback()  # Rollback the transaction to avoid issues
