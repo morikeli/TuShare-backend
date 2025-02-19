@@ -6,6 +6,7 @@ from models import User
 from utils import verify_password, create_access_token
 from datetime import datetime, timezone
 
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 router = APIRouter()
 
@@ -15,6 +16,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 @router.post("/token/")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
