@@ -30,4 +30,17 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     db.commit()
 
     access_token = create_access_token(data={"sub": user.username})
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": {
+            "username": user.username,
+            "email": user.email,
+            "profile_picture": user.profile_image,
+            "work_address": user.work_address,
+            "home_address": user.home_address,
+            "facebook_handle": user.facebook_handle,
+            "instagram_handle": user.instagram_handle,
+            "twitter_handle": user.twitter_handle
+        }
+    }
