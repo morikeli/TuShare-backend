@@ -21,7 +21,17 @@ def get_db():
         db.close()
 
 @router.post("/signup/")
-def create_user(username: str, email: str, password: str, profile_image: UploadFile = File(None), db: Session = Depends(get_db)):
+def create_user(
+        first_name: str, 
+        last_name: str,
+        username: str,
+        email: str,
+        gender: str,
+        password: str,
+        profile_image: UploadFile = File(None),
+        db: Session = Depends(get_db),
+
+    ):
     
     # Save the uploaded image to the server
     image_path = None
