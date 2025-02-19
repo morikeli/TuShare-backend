@@ -1,8 +1,9 @@
 import os
 import shutil
 import uuid
-from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from database import SessionLocal
 from models import User
 from utils import get_password_hash
