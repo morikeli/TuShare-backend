@@ -38,10 +38,27 @@ def create_user(username: str, email: str, password: str, profile_image: UploadF
     
     hashed_password = get_password_hash(password)
     db_user = User(username=username, email=email, profile_image=image_path, hashed_password=hashed_password)
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+
+    try:
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    
+    except IntegrityError as e:
+        db.rollback()  # Rollback the transaction to avoid issues
+
+        # Check if the error is due to a unique constraint violation - user account already exists
+        if "UNIQUE constraint failed" in str(e.orig):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Username or email already exists. Please choose a different one."
+            )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An unexpected database error occurred."
+        )
+
 
 @router.put("/profile/edit/")
 def edit_profile(image: UploadFile = File(...), db: Session = Depends(get_db), current_user: User = Depends(get_db)):
