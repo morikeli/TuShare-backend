@@ -3,6 +3,12 @@ from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime, timezone
 import uuid
+import os
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MEDIA_DIR = os.path.join(BASE_DIR, "media")
+DEFAULT_PROFILE_IMAGE_PATH = "/media/dps/default.png"
 
 
 class User(Base):
@@ -22,7 +28,7 @@ class User(Base):
     work_address = Column(String, nullable=True)
     home_address = Column(String, nullable=True)
     hashed_password = Column(String)
-    profile_image = Column(String, nullable=True)
+    profile_image = Column(String, nullable=True, default=DEFAULT_PROFILE_IMAGE_PATH)
     is_active = Column(Boolean, default=True)
     last_login = Column(DateTime, nullable=True)
     date_joined = Column(DateTime, default=lambda: datetime.now(timezone.utc))

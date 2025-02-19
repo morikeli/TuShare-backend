@@ -34,13 +34,11 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         "access_token": access_token,
         "token_type": "bearer",
         "user": {
+            "first_name": user.first_name,
+            "last_name": user.last_name,
             "username": user.username,
             "email": user.email,
-            "profile_picture": user.profile_image,
-            "work_address": user.work_address,
-            "home_address": user.home_address,
-            "facebook_handle": user.facebook_handle,
-            "instagram_handle": user.instagram_handle,
-            "twitter_handle": user.twitter_handle
+            "gender": user.gender,
+            "profile_picture": user.profile_image
         }
     }
