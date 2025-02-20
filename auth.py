@@ -21,27 +21,27 @@ router = APIRouter()
 
 # media folder for profile pictures
 UPLOAD_DIR = "media/dps/"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+Path(UPLOAD_DIR).mkdir(UPLOAD_DIR, exist_ok=True)
 
 
-def get_db():
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
     db = SessionLocal()
-    try:
+
+    async with AsyncSessionLocal() as db:
         yield db
-    finally:
-        db.close()
+        await db.close()
 
 
 @router.post("/login/", status_code=status.HTTP_200_OK)
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.username == form_data.username).first()
+async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
+    user = await db.query(User).filter(User.username == form_data.username).first()
 
     if not user or not verify_password(form_data.password, user.password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
 
     # Update the last_login field
     user.last_login = datetime.now(timezone.utc)
-    db.commit()
+    await db.commit()
 
     access_token = create_access_token(data={"sub": user.username})
     return {
@@ -62,7 +62,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 
 
 @router.post("/signup/", status_code=status.HTTP_201_CREATED)
-def create_user(user: UserCreate = Depends(), profile_image: UploadFile = File(None), db: Session = Depends(get_db)):
+async def create_user(user: UserCreate = Depends(), profile_image: UploadFile = File(None), db: AsyncSession = Depends(get_db)):
     
     # Save the uploaded image to the server
     image_path = None
@@ -72,9 +72,10 @@ def create_user(user: UserCreate = Depends(), profile_image: UploadFile = File(N
         unique_filename = f"{uuid.uuid4().hex}{file_extension}"
         image_path = os.path.join(UPLOAD_DIR, unique_filename)
 
-        # Save the uploaded image
-        with open(image_path, "wb") as image_file:
-            shutil.copyfileobj(profile_image.file, image_file)
+        # Save the uploaded image asynchronously
+        async with aiofiles.open(image_path, "wb") as image_file:
+            while chunk := await profile_image.read(1024):
+                await image_file.write(chunk)
 
     
     hashed_password = get_password_hash(user.password)
@@ -87,8 +88,8 @@ def create_user(user: UserCreate = Depends(), profile_image: UploadFile = File(N
 
     try:
         db.add(db_user)
-        db.commit()
-        db.refresh(db_user)
+        await db.commit()
+        await db.refresh(db_user)
         
         return {
             "id": db_user.id,
@@ -102,7 +103,7 @@ def create_user(user: UserCreate = Depends(), profile_image: UploadFile = File(N
         }
     
     except IntegrityError as e:
-        db.rollback()  # Rollback the transaction to avoid issues
+        await db.rollback()  # Rollback the transaction to avoid issues
 
         # Check if the error is due to a unique constraint violation - user account already exists
         if "UNIQUE constraint failed" in str(e.orig):
