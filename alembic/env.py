@@ -8,7 +8,7 @@ from alembic import context
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from alembic import context
-from database import Base  # Import your Base
+from db.database import Base  # Import your Base
 from models import User, Ride
 
 # this is the Alembic Config object, which provides

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from database import Base, engine
+from db.database import Base, engine
 from auth import router as auth_router
 from users import router as users_router
 from rides import router as rides_router
