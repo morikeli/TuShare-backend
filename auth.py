@@ -90,14 +90,10 @@ def create_user(user: UserCreate = Depends(), profile_image: UploadFile = File(N
             "first_name": db_user.first_name,
             "last_name": db_user.last_name,
             "username": db_user.username,
-            "email": db_user.email,
             "gender": db_user.gender,
-            "profile_image": db_user.profile_image,
-            "home_address": db_user.home_address,
-            "work_address": db_user.work_address,
-            "facebook_handle": db_user.facebook_handle,
-            "instagram_handle": db_user.instagram_handle,
-            "twitter_handle": db_user.twitter_handle
+            "email": db_user.email,
+            "mobile_number": db_user.mobile_number,
+            "profile_image": db_user.profile_image
         }
     
     except IntegrityError as e:
