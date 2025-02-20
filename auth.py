@@ -57,16 +57,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 
 
 @router.post("/signup/", status_code=status.HTTP_201_CREATED)
-def create_user(
-        first_name: str = Form(...), 
-        last_name: str = Form(...),
-        username: str = Form(...),
-        email: str = Form(...),
-        gender: str = Form(...),
-        password: str = Form(...),
-        profile_image: UploadFile = File(None),
-        db: Session = Depends(get_db),
-    ):
+def create_user(user: UserCreate = Depends(), profile_image: UploadFile = File(None), db: Session = Depends(get_db)):
     
     # Save the uploaded image to the server
     image_path = None
