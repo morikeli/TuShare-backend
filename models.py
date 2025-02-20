@@ -27,7 +27,7 @@ class User(Base):
     twitter_handle = Column(String, nullable=True)
     work_address = Column(String, nullable=True)
     home_address = Column(String, nullable=True)
-    hashed_password = Column(String)
+    password = Column(String)
     profile_image = Column(String, nullable=True, default=DEFAULT_PROFILE_IMAGE_PATH)
     is_active = Column(Boolean, default=True)
     last_login = Column(DateTime, nullable=True)
