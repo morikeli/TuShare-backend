@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.future import select
 from db.database import get_db
-from db.schemas import UserCreate
+from db.schemas import CreateUser
 from models import User
 from utils import verify_password, create_access_token
 from utils import get_password_hash
@@ -56,7 +56,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
 
 
 @router.post("/signup/", status_code=status.HTTP_201_CREATED)
-async def create_user(user: UserCreate = Depends(), profile_image: UploadFile = File(None), db: AsyncSession = Depends(get_db)):
+async def create_user(user: CreateUser = Depends(), profile_image: UploadFile = File(None), db: AsyncSession = Depends(get_db)):
     
     # Save the uploaded image to the server
     image_path = None

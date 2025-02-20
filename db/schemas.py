@@ -5,7 +5,7 @@ from typing import Annotated, Optional
 validated_mobile_num = Annotated[str, StringConstraints(min_length=10, max_length=15, pattern=r'^\+?[1-9]\d{1,14}$')]
 
 
-class UserCreate(BaseModel):
+class CreateUser(BaseModel):
     """ This is a schema to create a user profile when a user creates an account. """
     first_name: str
     last_name: str
