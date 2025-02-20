@@ -1,16 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, File, status, UploadFile
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
-from db.database import AsyncSessionLocal, SessionLocal
+from sqlalchemy.future import select
+from db.database import get_db
 from db.schemas import UserCreate
 from models import User
 from utils import verify_password, create_access_token
 from utils import get_password_hash
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import AsyncGenerator
 import aiofiles
 import os
 import uuid
