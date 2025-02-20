@@ -16,7 +16,6 @@ async def init_db():
 
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
-
     async with AsyncSessionLocal() as db:
         yield db
         await db.close()
