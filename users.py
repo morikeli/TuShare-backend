@@ -1,28 +1,26 @@
-import os
 from fastapi import APIRouter, Depends, UploadFile, File
-from sqlalchemy.orm import Session
-from db.database import SessionLocal
+from sqlalchemy.ext.asyncio import AsyncSession
+from db.database import get_db
 from models import User
-
+import aiofiles
+import os
 
 router = APIRouter()
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
 
 @router.put("/profile/edit/")
-def edit_profile(image: UploadFile = File(...), db: Session = Depends(get_db), current_user: User = Depends(get_db)):
+async def edit_profile(image: UploadFile = File(...), db: AsyncSession = Depends(get_db), current_user: User = Depends(get_db)):
     file_location = f"./media/dps/{image.filename}"
-    with open(file_location, "wb") as file_object:
-        file_object.write(image.file.read())
+    
+    # Save the uploaded image asynchronously
+    async with aiofiles.open(file_location, "wb") as file_object:
+        while chunk := await image.read(1024):
+            await file_object.write(chunk)
+    
     current_user.profile_image = file_location
-    db.commit()
-    db.refresh(current_user)
+    await db.commit()
+    await db.refresh(current_user)
+    
     return {
         "id": current_user.id,
         "username": current_user.username,
