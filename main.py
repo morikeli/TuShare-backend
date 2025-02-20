@@ -20,7 +20,6 @@ async def lifespan(app: FastAPI):
     await init_db()     # initialize database
     logger.info('DONE ... Database initialized.')
     print('======='*10)     # for decoration
-    # print('')
 
     # Yield control back to the FastAPI application — 
     # this allows the app to run while keeping the lifespan context open
