@@ -20,20 +20,15 @@ router = APIRouter()
 
 # media folder for profile pictures
 UPLOAD_DIR = "media/dps/"
-Path(UPLOAD_DIR).mkdir(UPLOAD_DIR, exist_ok=True)
+Path(UPLOAD_DIR).mkdir(parents=True, exist_ok=True)
 
-
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    db = SessionLocal()
-
-    async with AsyncSessionLocal() as db:
-        yield db
-        await db.close()
 
 
 @router.post("/login/", status_code=status.HTTP_200_OK)
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
-    user = await db.query(User).filter(User.username == form_data.username).first()
+    stmt = select(User).where(User.username == form_data.username)
+    result = await db.execute(stmt)
+    user = result.scalars().first()
 
     if not user or not verify_password(form_data.password, user.password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
