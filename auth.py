@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, File, Form, status, Uploa
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from database import SessionLocal
+from db.database import SessionLocal
+from db.schemas import UserCreate
 from models import User
 from utils import verify_password, create_access_token
 from datetime import datetime, timezone
