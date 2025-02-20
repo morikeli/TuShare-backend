@@ -39,6 +39,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
             "username": user.username,
             "email": user.email,
             "gender": user.gender,
-            "profile_picture": user.profile_image
+            "profile_picture": user.profile_image,
+            "date_joined": user.date_joined
         }
     }
