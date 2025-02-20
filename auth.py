@@ -72,8 +72,13 @@ def create_user(user: UserCreate = Depends(), profile_image: UploadFile = File(N
             shutil.copyfileobj(profile_image.file, image_file)
 
     
-    hashed_password = get_password_hash(password)
-    db_user = User(first_name=first_name, last_name=last_name, username=username, email=email, gender=gender, profile_image=image_path, hashed_password=hashed_password)
+    hashed_password = get_password_hash(user.password)
+    
+    user_data = user.model_dump()
+    user_data['profile_picture'] = image_path
+    user_data['hashed_password'] = hashed_password
+
+    db_user = User(**user_data)
 
     try:
         db.add(db_user)
