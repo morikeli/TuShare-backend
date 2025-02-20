@@ -1,4 +1,4 @@
-from pydantic import BaseModel, StringConstraints
+from pydantic import BaseModel, EmailStr, StringConstraints
 from typing import Annotated
 
 
@@ -10,6 +10,6 @@ class UserCreate(BaseModel):
     last_name: str
     gender: str
     username: str
-    email: str
+    email: EmailStr
     mobile_number: validated_mobile_num
-    hashed_password: str
+    password: str
