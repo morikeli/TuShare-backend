@@ -12,6 +12,6 @@ Base.metadata.create_all(bind=engine)
 
 app.mount("/media/dps", StaticFiles(directory="media/dps"), name="uploads")
 
-app.include_router(auth_router)
-app.include_router(users_router)
-app.include_router(rides_router)
+app.include_router(auth_router, prefix='/api/v1/auth')
+app.include_router(users_router, prefix='/api/v1/users')
+app.include_router(rides_router, prefix='/api/v1')
