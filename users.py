@@ -20,7 +20,7 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/signup/")
+@router.post("/signup/", status_code=status.HTTP_201_CREATED)
 def create_user(
         first_name: str = Form(...), 
         last_name: str = Form(...),
