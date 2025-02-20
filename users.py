@@ -1,7 +1,7 @@
 import os
 import shutil
 import uuid
-from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status, Form
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from database import SessionLocal
@@ -22,12 +22,12 @@ def get_db():
 
 @router.post("/signup/")
 def create_user(
-        first_name: str, 
-        last_name: str,
-        username: str,
-        email: str,
-        gender: str,
-        password: str,
+        first_name: str = Form(...), 
+        last_name: str = Form(...),
+        username: str = Form(...),
+        email: str = Form(...),
+        gender: str = Form(...),
+        password: str = Form(...),
         profile_image: UploadFile = File(None),
         db: Session = Depends(get_db),
 
