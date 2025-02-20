@@ -1,14 +1,24 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, File, Form, status, UploadFile
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from database import SessionLocal
 from models import User
 from utils import verify_password, create_access_token
 from datetime import datetime, timezone
+from utils import get_password_hash
+import os
+import shutil
+import uuid
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 router = APIRouter()
+
+# media folder for profile pictures
+UPLOAD_DIR = "media/dps/"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
 
 def get_db():
     db = SessionLocal()
