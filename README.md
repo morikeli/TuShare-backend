@@ -1,6 +1,6 @@
 # 🚀 TuShare (ride-sharing app) API
 
-This is a FastAPI-based RESTful API for user signup and profile management. The API allows users to create accounts, login, view or edit their profile.
+This is a FastAPI-based RESTful API for user signup and profile management. The API serves the [TuShare mobile app](https://github.com/morikeli/TuShare) and allows allows users to create accounts, login, view or edit their profile. 
 
 ## 📋 Features
 
