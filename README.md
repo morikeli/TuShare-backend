@@ -96,7 +96,7 @@ Contributions are welcome! Please fork the repository and submit a pull request.
 
 ## 🐛 Issues
 
-If you encounter any issues, please create an issue [here](https://github.com/yourusername/yourrepository/issues).
+If you encounter any issues, please create an issue [here](https://github.com/morikeli/TuShare-backend/issues).
 
 ---
 
