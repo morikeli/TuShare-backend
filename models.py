@@ -48,6 +48,10 @@ class Ride(Base):
 
 
 class TokenBlacklist(Base):
+    """ In FastAPI, a logout mechanism typically involves invalidating the user's access token. 
+        Since JWT tokens are stateless, you cannot "destroy" them on the server side. 
+    """
+    
     __tablename__ = "token_blacklist"
 
     token = Column(String, primary_key=True, index=True)
