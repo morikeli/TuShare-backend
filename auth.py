@@ -5,8 +5,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.future import select
 from db.database import get_db
 from db.schemas import CreateUser
-from models import User
-from utils import verify_password, create_access_token
+from models import TokenBlacklist, User
+from utils import get_current_user, verify_password, create_access_token
 from utils import get_password_hash
 from datetime import datetime, timezone
 from pathlib import Path
@@ -110,3 +110,28 @@ async def create_user(user: CreateUser = Depends(), profile_image: UploadFile = 
             detail="An unexpected database error occurred."
         )
 
+
+@router.post("/logout/")
+async def logout(current_user: dict = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    """
+    Logs out the current user by blacklisting their token.
+    """
+    token = current_user["token"]  # Extract token from request
+
+    # Check if the token is already blacklisted
+    existing_token = await db.execute(
+        select(TokenBlacklist).where(TokenBlacklist.c.token == token)
+    )
+    
+    if existing_token.scalar():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token has expired!"
+        )
+
+    # Blacklist the token
+    blacklist_entry = TokenBlacklist(token=token, created_at=datetime.now(timezone.utc))
+    db.add(blacklist_entry)
+    await db.commit()
+
+    return {"message": "Successfully logged out"}
