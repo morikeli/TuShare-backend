@@ -45,3 +45,10 @@ class Ride(Base):
     price = Column(Float)
     booked_by = Column(Integer, ForeignKey('users.id'), nullable=True)
     user = relationship("User")
+
+
+class TokenBlacklist(Base):
+    __tablename__ = "token_blacklist"
+
+    token = Column(String, primary_key=True, index=True)
+    created_at = Column(DateTime, nullable=False)
