@@ -8,7 +8,7 @@ from sqlalchemy.future import select
 from passlib.context import CryptContext
 from jose import jwt
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
-from models import User
+from models import TokenBlacklist, User
 import jwt
 import os
 
