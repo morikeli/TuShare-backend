@@ -31,6 +31,7 @@ class UserProfile(BaseModel):
     id: UUID
     first_name: str | None = None
     last_name: str | None = None
+    username: str | None = None
     email: EmailStr
     mobile_number: str | None = None
     facebook_handle: str | None = None
@@ -39,7 +40,7 @@ class UserProfile(BaseModel):
     work_address: str | None = None
     home_address: str | None = None
     profile_image: str | None = None
-    date_joined: str | None = None
+    date_joined: datetime | None = None
 
     class Config:
         from_attributes = True
