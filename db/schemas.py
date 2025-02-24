@@ -21,7 +21,7 @@ class UserProfile(BaseModel):
     """ This schema is the response model for the getting user profile in `/profile/` endpoint. """
     id: UUID
     email: EmailStr
-    mobile_number: str
+    mobile_number: str | None = None
     facebook_handle: str | None = None
     instagram_handle: str | None = None
     twitter_handle: str | None = None
