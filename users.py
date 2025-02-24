@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
 from db.database import get_db
-from db.schemas import UpdateUserProfile
+from db.schemas import UpdateUserProfile, UserProfile
 from models import User
 from utils import get_current_user
 import aiofiles
@@ -11,8 +11,8 @@ import os
 router = APIRouter()
 
 
-@router.get("/profile", response_model=UserProfileResponse)
-async def get_profile(current_user: UserProfileResponse = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+@router.get("/profile", response_model=UserProfile)
+async def get_profile(current_user: UserProfile = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     return current_user  # FastAPI will automatically convert this to JSON
 
 
