@@ -20,6 +20,8 @@ class CreateUser(BaseModel):
 class UserProfile(BaseModel):
     """ This schema is the response model for the getting user profile in `/profile/` endpoint. """
     id: UUID
+    first_name: str | None = None
+    last_name: str | None = None
     email: EmailStr
     mobile_number: str | None = None
     facebook_handle: str | None = None
