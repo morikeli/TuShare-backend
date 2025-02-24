@@ -32,6 +32,7 @@ class UserProfile(BaseModel):
     first_name: str | None = None
     last_name: str | None = None
     username: str | None = None
+    bio: str | None = None
     email: EmailStr
     mobile_number: str | None = None
     facebook_handle: str | None = None
