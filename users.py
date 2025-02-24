@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends, UploadFile, File
+from fastapi import APIRouter, Depends, UploadFile, File, Form, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from db.database import get_db
 from db.schemas import UpdateUserProfile, UserProfile
 from models import User
 from utils import get_current_user
 import aiofiles
-import os
+import json
 
 
 router = APIRouter()
