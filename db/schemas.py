@@ -36,14 +36,16 @@ class UserProfile(BaseModel):
 
 class UpdateUserProfile(BaseModel):
     """ This is a schema to update a user's profile. """
+    id: UUID
     first_name: Optional[str]
     last_name: Optional[str]
     username: Optional[str]
     gender: Optional[str]
-    mobile_num: Optional[validated_mobile_num]
+    mobile_number: Optional[str]
     facebook_handle: Optional[str]
     instagram_handle: Optional[str]
     twitter_handle: Optional[str]
     work_address: Optional[str]
     home_address: Optional[str]
     bio: Optional[str]
+    profile_image: Optional[str] = None
