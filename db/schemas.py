@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, StringConstraints
 from typing import Annotated, Optional
+from uuid import UUID
 
 
 validated_mobile_num = Annotated[str, StringConstraints(min_length=10, max_length=15, pattern=r'^\+?[1-9]\d{1,14}$')]
@@ -14,6 +15,21 @@ class CreateUser(BaseModel):
     email: EmailStr
     mobile_number: validated_mobile_num
     password: str
+
+
+class UserProfile(BaseModel):
+    """ This schema is the response model for the getting user profile in `/profile/` endpoint. """
+    id: UUID
+    email: EmailStr
+    mobile_number: str
+    facebook_handle: str | None = None
+    instagram_handle: str | None = None
+    twitter_handle: str | None = None
+    work_address: str | None = None
+    home_address: str | None = None
+
+    class Config:
+        from_attributes = True
 
 
 class UpdateUserProfile(BaseModel):
