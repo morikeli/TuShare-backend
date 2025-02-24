@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, StringConstraints
+from pydantic import BaseModel, EmailStr, StringConstraints, field_validator
 from typing import Annotated, Optional
 from datetime import datetime
 from uuid import UUID
@@ -29,19 +29,34 @@ class CreateUser(BaseModel):
 class UserProfile(BaseModel):
     """ This schema is the response model for the getting user profile in `/profile/` endpoint. """
     id: UUID
-    first_name: str | None = None
-    last_name: str | None = None
-    username: str | None = None
-    bio: str | None = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    username: Optional[str] = None
+    bio: Optional[str] = None
     email: EmailStr
-    mobile_number: str | None = None
-    facebook_handle: str | None = None
-    instagram_handle: str | None = None
-    twitter_handle: str | None = None
-    work_address: str | None = None
-    home_address: str | None = None
-    profile_image: str | None = None
-    date_joined: datetime | None = None
+    mobile_number: Optional[str] = None
+    facebook_handle: Optional[str] = None
+    instagram_handle: Optional[str] = None
+    twitter_handle: Optional[str] = None
+    work_address: Optional[str] = None
+    home_address: Optional[str] = None
+    profile_image: Optional[str] = None
+    date_joined: Optional[datetime] = None
+
+    # Convert None to an empty string
+    @field_validator(
+        "first_name", "last_name", "username", "bio", "mobile_number",
+        "facebook_handle", "instagram_handle", "twitter_handle",
+        "work_address", "home_address", "profile_image",
+        mode="before"
+    )
+    def convert_none_to_empty_string(cls, value: Optional[str]) -> str:
+        return "" if value is None else value
+
+    # Convert datetime to string (ISO format)
+    @field_validator("date_joined", mode="before")
+    def convert_datetime_to_string(cls, value: Optional[datetime]) -> str:
+        return value.isoformat() if value is not None else ""
 
     class Config:
         from_attributes = True
