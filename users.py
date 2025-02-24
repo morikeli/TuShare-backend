@@ -16,7 +16,7 @@ async def get_profile(current_user: UserProfileResponse = Depends(get_current_us
     return current_user  # FastAPI will automatically convert this to JSON
 
 
-@router.put("/profile/edit/")
+@router.put("/profile/edit")
 async def edit_profile(profile_data: UpdateUserProfile, image: UploadFile = File(...), db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user)):
     file_location = f"./media/dps/{image.filename}"
     
