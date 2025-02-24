@@ -20,6 +20,7 @@ class User(Base):
     last_name = Column(String, nullable=False)
     gender = Column(String, nullable=False)
     username = Column(String, unique=True, index=True)
+    bio = Column(String, nullable=True)
     email = Column(String, unique=True, index=True)
     mobile_number = Column(String, unique=True, index=True)
     facebook_handle = Column(String, nullable=True)
