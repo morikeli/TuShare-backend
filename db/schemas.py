@@ -39,7 +39,7 @@ class UserProfile(BaseModel):
     work_address: str | None = None
     home_address: str | None = None
     profile_image: str | None = None
-    date_joined: str | None = None
+    date_joined: datetime | None = None
 
     class Config:
         from_attributes = True
