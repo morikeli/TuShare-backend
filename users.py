@@ -35,7 +35,7 @@ async def edit_profile(profile_data: UpdateUserProfile, image: UploadFile = File
         "username": current_user.username,
         "email": current_user.email,
         "profile_image": f"/media/dps/{os.path.basename(file_location)}" if file_location else None,
-         "facebook_handle": current_user.facebook_handle,
+        "facebook_handle": current_user.facebook_handle,
         "instagram_handle": current_user.instagram_handle,
         "twitter_handle": current_user.twitter_handle,
         "work_address": current_user.work_address,
