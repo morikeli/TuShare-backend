@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.future import select
 from db.database import get_db
-from db.schemas import CreateUser
+from db.schemas import CreateUser, LoginResponse
 from models import TokenBlacklist, User
 from utils import get_current_user, verify_password, create_access_token
 from utils import get_password_hash
@@ -24,7 +24,7 @@ Path(UPLOAD_DIR).mkdir(parents=True, exist_ok=True)
 
 
 
-@router.post("/login/", status_code=status.HTTP_200_OK)
+@router.post("/login/", status_code=status.HTTP_200_OK, reponse_model=LoginResponse)
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
     stmt = select(User).where(User.username == form_data.username)
     result = await db.execute(stmt)
@@ -37,22 +37,13 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
     user.last_login = datetime.now(timezone.utc)
     await db.commit()
 
-    access_token = create_access_token(data={"sub": user.username})
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "user": {
-            "id": user.id,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "username": user.username,
-            "mobile_number": user.mobile_number,
-            "email": user.email,
-            "gender": user.gender,
-            "profile_picture": user.profile_image,
-            "date_joined": user.date_joined
-        }
-    }
+    access_token = create_access_token(data={"sub": user.username})     # generate access token
+    return LoginResponse(
+        access_token=access_token,
+        token_type="bearer",
+        username=user.username,
+        last_login=user.last_login
+    )
 
 
 @router.post("/signup/", status_code=status.HTTP_201_CREATED)
