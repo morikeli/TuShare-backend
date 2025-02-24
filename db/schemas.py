@@ -1,9 +1,18 @@
 from pydantic import BaseModel, EmailStr, StringConstraints
 from typing import Annotated, Optional
+from datetime import datetime
 from uuid import UUID
 
 
 validated_mobile_num = Annotated[str, StringConstraints(min_length=10, max_length=15, pattern=r'^\+?[1-9]\d{1,14}$')]
+
+
+class LoginResponse(BaseModel):
+    """ This is a login response schema. It returns json data with the fields below. """
+    access_token: str
+    token_type: str
+    username: str
+    last_login: Optional[datetime]
 
 
 class CreateUser(BaseModel):
