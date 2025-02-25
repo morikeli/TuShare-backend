@@ -20,11 +20,6 @@ import uuid
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 router = APIRouter()
 
-# media folder for profile pictures
-UPLOAD_DIR = "media/dps/"
-Path(UPLOAD_DIR).mkdir(parents=True, exist_ok=True)
-
-
 
 @router.post("/login/", status_code=status.HTTP_200_OK, response_model=LoginResponse)
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
