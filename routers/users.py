@@ -31,24 +31,45 @@ async def edit_profile(profile_data: str = Form(...), profile_pic: Optional[Uplo
     except json.JSONDecodeError:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid JSON format for profile_data")
     
-    if image:
-        file_location = f"./media/dps/{profile_pic.filename}"
+    if profile_pic:
+        profile_image_path = os.path.join(UPLOAD_DIR, profile_pic.filename)
         
         # Save the uploaded image asynchronously
-        async with aiofiles.open(file_location, "wb") as file_object:
-            while chunk := await image.read(1024):
+        async with aiofiles.open(profile_image_path, "wb") as file_object:
+            while chunk := await profile_pic.read(1024):
                 await file_object.write(chunk)
     
         # update user profile fields
-        current_user.profile_image = file_location
+        current_user.profile_image = profile_image_path
         print(f'User profile picture: {current_user.profile_image}')
+    
+
+    # Since mobile number is unique, check if mobile number exists before updating
+    new_mobile_number = profile_data.get("mobile_number")
+    if new_mobile_number and new_mobile_number != current_user.mobile_number:   # if "new_mobile_number" has a value and "new_mobile_number" is not the user's current mobile number
+        stmt = select(User).where(User.mobile_number == new_mobile_number)
+        result = await db.execute(stmt)
+        existing_user = result.scalars().first()
+
+        if existing_user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Mobile number is already in use"
+            )
 
     print(f'Profile data: {profile_data.items()}')
     # update user fields dynamically
     for field, value in profile_data.items():
         setattr(current_user, field, value if value is not None else getattr(current_user, field))
 
-    await db.commit()
-    await db.refresh(current_user)
-    
+    try:
+        await db.commit()
+        await db.refresh(current_user)
+    except IntegrityError:
+        await db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Failed to update profile due to a constraint violation."
+        )
+
     return current_user
