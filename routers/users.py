@@ -28,6 +28,7 @@ async def edit_profile(profile_data: str = Form(...), image: Optional[UploadFile
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid JSON format for profile_data")
     
     if image:
+        print(f'Image file: {image.filename}')
         file_location = f"./media/dps/{image.filename}"
         
         # Save the uploaded image asynchronously
@@ -39,7 +40,7 @@ async def edit_profile(profile_data: str = Form(...), image: Optional[UploadFile
         current_user.profile_image = file_location
         print(f'User profile picture: {current_user.profile_image}')
 
-    print(f'Profile data: {profile_data.items()}')
+    print(f'Profile data: {profile_data.items}')
     # update user fields dynamically
     for field, value in profile_data.items():
         setattr(current_user, field, value if value is not None else getattr(current_user, field))
