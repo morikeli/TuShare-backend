@@ -4,6 +4,7 @@ from sqlalchemy import or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.future import select
+from config import UPLOAD_DIR
 from db.database import get_db
 from db.schemas import CreateUser, LoginResponse
 from models import TokenBlacklist, User
