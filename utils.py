@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
+from config import SECRET_KEY
 from db.database import get_db
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
