@@ -19,7 +19,7 @@ async def get_profile(current_user: UserProfile = Depends(get_current_user), db:
 
 
 @router.put("/profile/edit", response_model=UpdateUserProfile)
-async def edit_profile(profile_data: str = Form(...), image: Optional[UploadFile] = File(None), db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def edit_profile(profile_data: str = Form(...), profile_pic: Optional[UploadFile] = File(None), db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user)):
     """ Update the current user's profile. """
     # Convert profile_data string to a dictionary
     try:
@@ -27,10 +27,8 @@ async def edit_profile(profile_data: str = Form(...), image: Optional[UploadFile
     except json.JSONDecodeError:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid JSON format for profile_data")
     
-    print(f'Image file: {image}')
     if image:
-        print(f'[IF BLOCK] Image file: {image.filename}')
-        file_location = f"./media/dps/{image.filename}"
+        file_location = f"./media/dps/{profile_pic.filename}"
         
         # Save the uploaded image asynchronously
         async with aiofiles.open(file_location, "wb") as file_object:
