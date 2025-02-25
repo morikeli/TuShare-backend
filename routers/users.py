@@ -34,9 +34,9 @@ async def edit_profile(profile_data: str = Form(...), image: UploadFile = File(.
             while chunk := await image.read(1024):
                 await file_object.write(chunk)
     
-    # update user profile fields
-    current_user.profile_image = file_location
-
+        # update user profile fields
+        current_user.profile_image = file_location
+    print(f'User profile picture: {current_user.profile_image}')
     # update user fields dynamically
     for field, value in profile_data.items():
         setattr(current_user, field, value if value is not None else getattr(current_user, field))
