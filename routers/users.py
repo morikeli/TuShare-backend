@@ -41,7 +41,6 @@ async def edit_profile(profile_data: str = Form(...), profile_pic: Optional[Uplo
     
         # update user profile fields
         current_user.profile_image = profile_image_path
-        print(f'User profile picture: {current_user.profile_image}')
     
 
     # Since mobile number is unique, check if mobile number exists before updating
@@ -57,7 +56,6 @@ async def edit_profile(profile_data: str = Form(...), profile_pic: Optional[Uplo
                 detail="Mobile number is already in use. Please provide a different number."
             )
 
-    print(f'Profile data: {profile_data.items()}')
     # update user fields dynamically
     for field, value in profile_data.items():
         setattr(current_user, field, value if value is not None else getattr(current_user, field))
