@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, UploadFile, File, Form, HTTPException, status
+from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from db.database import get_db
 from db.schemas import UpdateUserProfile, UserProfile
@@ -18,7 +19,7 @@ async def get_profile(current_user: UserProfile = Depends(get_current_user), db:
 
 
 @router.put("/profile/edit", response_model=UpdateUserProfile)
-async def edit_profile(profile_data: str = Form(...), image: UploadFile = File(...), db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def edit_profile(profile_data: str = Form(...), image: Optional[UploadFile] = File(None), db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user)):
     """ Update the current user's profile. """
     # Convert profile_data string to a dictionary
     try:
