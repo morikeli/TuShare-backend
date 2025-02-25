@@ -54,7 +54,7 @@ async def edit_profile(profile_data: str = Form(...), profile_pic: Optional[Uplo
         if existing_user:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Mobile number is already in use"
+                detail="Mobile number is already in use. Please provide a different number."
             )
 
     print(f'Profile data: {profile_data.items()}')
