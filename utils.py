@@ -11,16 +11,12 @@ from jose import jwt
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from models import TokenBlacklist, User
 import jwt
-import os
 
 
-load_dotenv()   # load environment variables from .env file
-
-SECRET_KEY = os.getenv('SECRET_KEY')
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_password_hash(password):
