@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, File, status, UploadFile
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from sqlachemy import or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.future import select
@@ -26,7 +27,7 @@ Path(UPLOAD_DIR).mkdir(parents=True, exist_ok=True)
 
 @router.post("/login/", status_code=status.HTTP_200_OK, response_model=LoginResponse)
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
-    stmt = select(User).where(User.username == form_data.username)
+    stmt = select(User).where(or_(User.email == form_data.email, User.username == form_data.username))
     result = await db.execute(stmt)
     user = result.scalars().first()
 
