@@ -8,7 +8,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
-DEFAULT_PROFILE_IMAGE_PATH = "/media/dps/default.png"
+DEFAULT_PROFILE_IMAGE_PATH = "media/dps/default.png"
 
 
 class User(Base):
