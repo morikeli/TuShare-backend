@@ -73,16 +73,7 @@ async def create_user(user: CreateUser = Depends(CreateUser.as_form), profile_im
         await db.commit()
         await db.refresh(db_user)
         
-        return {
-            "id": db_user.id,
-            "first_name": db_user.first_name,
-            "last_name": db_user.last_name,
-            "username": db_user.username,
-            "gender": db_user.gender,
-            "email": db_user.email,
-            "mobile_number": db_user.mobile_number,
-            "profile_image": db_user.profile_image
-        }
+        return user
     
     except IntegrityError as e:
         await db.rollback()  # Rollback the transaction to avoid issues
