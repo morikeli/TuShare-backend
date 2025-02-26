@@ -43,8 +43,8 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
     )
 
 
-@router.post("/signup/", status_code=status.HTTP_201_CREATED)
-async def create_user(user: CreateUser = Depends(), profile_image: UploadFile = File(None), db: AsyncSession = Depends(get_db)):
+@router.post("/signup", status_code=status.HTTP_201_CREATED, response_model=CreateUser)
+async def create_user(user: CreateUser = Depends(CreateUser.as_form), profile_image: UploadFile = File(None), db: AsyncSession = Depends(get_db)):
     
     # Save the uploaded image to the server
     image_path = None
