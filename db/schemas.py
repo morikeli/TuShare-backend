@@ -1,3 +1,4 @@
+from fastapi import Form
 from pydantic import BaseModel, EmailStr, StringConstraints, field_validator
 from typing import Annotated, Optional
 from datetime import datetime
@@ -24,6 +25,32 @@ class CreateUser(BaseModel):
     email: EmailStr
     mobile_number: validated_mobile_num
     password: str
+
+    @classmethod
+    def as_form(
+        cls,
+        mobile_number: validated_mobile_num,    # expects 'mobile_number' from form data
+        first_name: str = Form(...),    # expects 'first_name' from form data
+        last_name: str = Form(...),    # expects 'last_name' from form data
+        username: str = Form(...),    # expects 'username' from form data
+        email: str = Form(...),    # expects 'email' from form data
+        gender: str = Form(...),    # expects 'gender' from form data
+        password: str = Form(...)    # expects 'password' from form data
+    ):
+        """
+        Converts form data into a Pydantic model instance.
+        This method is used with FastAPI's `Depends()` - in edit profile's router to allow
+        handling form submissions while maintaining model validation.
+        """
+        return cls(
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            email=email,
+            mobile_number=mobile_number,
+            gender=gender,
+            password=password
+        )
 
 
 class UserProfile(BaseModel):
