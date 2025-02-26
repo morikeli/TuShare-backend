@@ -21,7 +21,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 router = APIRouter()
 
 
-@router.post("/login/", status_code=status.HTTP_200_OK, response_model=LoginResponse)
+@router.post("/login", status_code=status.HTTP_200_OK, response_model=LoginResponse)
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
     stmt = select(User).where(or_(User.email == form_data.username, User.username == form_data.username))
     result = await db.execute(stmt)
@@ -90,7 +90,7 @@ async def create_user(user: CreateUser = Depends(CreateUser.as_form), profile_im
         )
 
 
-@router.post("/logout/")
+@router.post("/logout")
 async def logout(current_user: dict = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     """
     Logs out the current user by blacklisting their token.
