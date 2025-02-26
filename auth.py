@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, File, status, UploadFile
+from fastapi import APIRouter, Depends, Header, HTTPException, File, status, UploadFile
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy import or_
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -91,15 +91,16 @@ async def create_user(user: CreateUser = Depends(CreateUser.as_form), profile_im
 
 
 @router.post("/logout")
-async def logout(current_user: dict = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+async def logout(authorization: str = Header(...), current_user: dict = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     """
     Logs out the current user by blacklisting their token.
     """
-    token = current_user["token"]  # Extract token from request
+    # Extract the token from the Authorization header
+    token = authorization.replace("Bearer ", "")
 
     # Check if the token is already blacklisted
     existing_token = await db.execute(
-        select(TokenBlacklist).where(TokenBlacklist.c.token == token)
+        select(TokenBlacklist).where(TokenBlacklist.token == token)
     )
     
     if existing_token.scalar():
