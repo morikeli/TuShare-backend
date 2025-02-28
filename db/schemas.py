@@ -104,3 +104,27 @@ class UpdateUserProfile(BaseModel):
     home_address: Optional[str]
     bio: Optional[str]
     profile_image: Optional[str] = None
+
+
+from pydantic import BaseModel
+from typing import Optional
+from datetime import datetime
+
+
+class RideCreate(BaseModel):
+    """ Schema for creating a ride """
+    driver_name: str
+    origin: str
+    destination: str
+    price: float
+    available_seats: int  # Assuming you have this field
+    departure_time: datetime  # When the ride is available
+
+    class Config:
+        from_attributes = True  # Ensures compatibility with ORM
+
+
+class RideResponse(RideCreate):
+    """ Schema for returning ride details """
+    id: str  # UUID as a string
+    booked_by: Optional[str] = None  # User ID of the passenger if booked
