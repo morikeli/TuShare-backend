@@ -57,7 +57,7 @@ class Ride(Base):
     departure_time = Column(DateTime, nullable=False)
     price_per_seat = Column(Float, nullable=False)
     is_available = Column(Boolean, default=True)
-
+    role = Column(Enum("passenger", "driver", name="user_role"), default="passenger", nullable=False)
     # Relationships
     driver = relationship("User", back_populates="rides")
     bookings = relationship("Booking", back_populates="ride")
