@@ -65,7 +65,7 @@ async def post_ride(ride_data: RideCreate, db: AsyncSession = Depends(get_db), c
     if current_user.role != "driver":
         raise HTTPException(status_code=403, detail="Only drivers can post rides")
 
-    new_ride = Ride(**ride_data.dict(), booked_by=None)
+    new_ride = Ride(**ride_data.model_dump(), booked_by=None)
 
     db.add(new_ride)
     await db.commit()
