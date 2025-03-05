@@ -1,5 +1,5 @@
 from fastapi import Form
-from pydantic import BaseModel, EmailStr, StringConstraints, field_validator
+from pydantic import BaseModel, EmailStr, Field, StringConstraints, field_validator
 from typing import Annotated, Optional
 from datetime import datetime
 from uuid import UUID
