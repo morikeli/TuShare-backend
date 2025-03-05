@@ -62,6 +62,13 @@ class Ride(Base):
     driver = relationship("User", back_populates="rides")
     bookings = relationship("Booking", back_populates="ride")
 
+    # Auto-fetch driver's name when querying rides
+    driver_name = column_property(
+        select(User.first_name + " " + User.last_name)
+        .where(User.id == driver_id)
+        .scalar_subquery()
+    )
+
 
 class Booking(Base):
     """ Represents a booking made by a passenger. """
