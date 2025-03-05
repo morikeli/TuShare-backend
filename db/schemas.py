@@ -106,19 +106,14 @@ class UpdateUserProfile(BaseModel):
     profile_image: Optional[str] = None
 
 
-from pydantic import BaseModel
-from typing import Optional
-from datetime import datetime
-
-
 class RideCreate(BaseModel):
     """ Schema for creating a ride """
     driver_name: str
     origin: str
     destination: str
     price: float
-    available_seats: int  # Assuming you have this field
-    departure_time: datetime  # When the ride is available
+    available_seats: int
+    departure_time: datetime
 
     class Config:
         from_attributes = True  # Ensures compatibility with ORM
