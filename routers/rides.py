@@ -34,26 +34,63 @@ async def get_user_booked_rides(db: AsyncSession = Depends(get_db), current_user
 
 
 @router.post("/{ride_id}/book", status_code=status.HTTP_201_CREATED, response_model=RideResponse)
-async def book_ride(ride_id: str, db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user),):
+async def book_ride(ride_id: str,  db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user),
+):
     """ Book an available ride. """
-    # Fetch the ride
-    q_stmt = select(Ride).where(Ride.id == ride_id)
+    # Fetch the ride with the driver info
+    q_stmt = select(Ride, User).join(User, Ride.driver_id == User.id).where(Ride.id == ride_id)
     result = await db.execute(q_stmt)
-    ride = result.scalars().first()
+    ride_data = result.first()
+
     
-    if not ride:
+    if not ride_data:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ride not found")
+
+    ride, driver = ride_data
+    driver_name = driver.first_name + driver.last_name
+
+    # Prevent drivers from booking their own rides
+    if ride.driver_id == current_user.id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Drivers cannot book their own rides.")
+
+    if ride.available_seats <= 0:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No available seats left.")
     
-    if ride.booked_by is not None:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Ride is already booked")
-    
-    # Assign ride to user
-    ride.booked_by = current_user.id
+    # Check if the user has already booked this ride
+    booking_stmt = select(Booking).where(
+        Booking.ride_id == ride_id, Booking.passenger_id == current_user.id
+    )
+    existing_booking = await db.execute(booking_stmt)
+
+    if existing_booking.scalars().first():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="You have already booked this ride"
+        )
+
+    # Create a new booking
+    new_booking = Booking(
+        ride_id=ride.id,
+        passenger_id=current_user.id,
+        seats_booked=1,  # Assuming 1 seat per booking
+        total_price=ride.price_per_seat,  # Assuming price per seat
+        status="pending"
+    )
+
+    db.add(new_booking)
+
+    # Reduce available seats
+    ride.available_seats -= 1
 
     try:
         await db.commit()
         await db.refresh(ride)
-        return ride
+
+        # Convert SQLAlchemy model to dict and add driver_name dynamically
+        ride_dict = ride.__dict__.copy()
+        ride_dict["driver_name"] = driver_name
+
+        return RideResponse.model_validate(ride_dict)
+
     except IntegrityError:
         await db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Booking failed")
