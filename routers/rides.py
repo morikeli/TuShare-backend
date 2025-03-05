@@ -65,10 +65,11 @@ async def post_ride(ride_data: RideCreate, db: AsyncSession = Depends(get_db), c
     if current_user.role != "driver":
         raise HTTPException(status_code=403, detail="Only drivers can post rides")
 
-    new_ride = Ride(**ride_data.model_dump(), booked_by=None)
+    driver_name = f"{current_user.first_name} {current_user.last_name}"
+    new_ride = Ride(**ride_data.model_dump(), driver_id=current_user.id)
 
     db.add(new_ride)
     await db.commit()
     await db.refresh(new_ride)
 
-    return new_ride
+    return RideResponse(**new_ride.__dict__, driver_name=driver_name)
