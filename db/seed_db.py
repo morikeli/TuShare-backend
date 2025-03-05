@@ -65,13 +65,31 @@ async def seed_rides(db: AsyncSession, users):
         "Upperhill - 2nd Ngong Avenue", 
         "Upperhill - Community stage",
     ]
+
+    vehicle_model = [
+        'BMW M3',
+        'BMW M5',
+        'Nissan AD',
+        'Nissan Sylphy',
+        'Porsche 911 Turbo S',
+        'Subaru Legacy B4',
+        'Subaru Impreza',
+        'Suzuki Alto',
+        'Toyota Corolla',
+        'Toyota Premio',
+        'Toyota Rav4',
+        'Toyota Rush',
+        'Volkswagen Golf',
+        'Volkswagen Passat',
+        'Volkswagen Polo',
+    ]
     
     rides = [
         Ride(
             id=str(uuid.uuid4().hex),
             driver_id=fake.random_element(users).id,
             vehicle_type=fake.random_element(["Sedan", "SUV", "Bike"]),
-            vehicle_model=fake.word(),
+            vehicle_model=fake.random_element(vehicle_model),
             vehicle_plate=fake.license_plate(),
             available_seats=fake.random_int(min=1, max=4),
             departure_location=fake.city(),
