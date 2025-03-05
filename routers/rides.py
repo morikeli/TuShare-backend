@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import joinedload
+from sqlalchemy.sql.expression import func
 from db.database import get_db
 from db.schemas import RideCreate, RideResponse
 from models import Booking, Ride, User
@@ -13,10 +15,15 @@ router = APIRouter()
 @router.get("/rides", response_model=list[RideResponse])
 async def get_available_rides(destination: str, db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user),):
     """ Get all available rides that are not booked. """
-    stmt = select(Ride).where(
-        Ride.destination == destination,  # Match the requested destination
-        Ride.available_seats > 0  # Ensure the ride still has seats left
+    stmt = (
+        select(Ride)
+        .options(joinedload(Ride.driver))  # Auto-load driver details
+        .where(
+            func.lower(Ride.destination).ilike(f"%{destination.lower()}%"),     # case-insensitive destination
+            Ride.available_seats > 0
+        )
     )
+
     
     result = await db.execute(stmt)
     rides = result.scalars().all() 
