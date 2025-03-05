@@ -14,7 +14,7 @@ async def seed_users(db: AsyncSession):
     """Create fake users."""
     users = []
 
-    for _ in range(5):
+    for _ in range(50):
         first_name = fake.first_name().lower()
         last_name = fake.last_name().lower()
         
@@ -44,6 +44,27 @@ async def seed_users(db: AsyncSession):
 
 async def seed_rides(db: AsyncSession, users):
     """Create fake ride records."""
+    destinations_list = [
+        "Donholm",
+        "GPO - Nairobi", 
+        "Kayole",
+        "Kayole junction",
+        "Kisumu", 
+        "Kitere - Rongo",
+        "Machakos", 
+        "Mombasa", 
+        "Pipeline",
+        "Rongo town",
+        "Rongo University - Kitere",
+        "Umoja 1",
+        "Umoja 2",
+        "Umoja 3",
+        "Umoja Innercore",
+        "Upperhill - National Library",
+        "Upperhill - 2nd Ngong Avenue", 
+        "Upperhill - Community stage",
+    ]
+    
     rides = [
         Ride(
             id=str(uuid.uuid4().hex),
@@ -53,12 +74,12 @@ async def seed_rides(db: AsyncSession, users):
             vehicle_plate=fake.license_plate(),
             available_seats=fake.random_int(min=1, max=4),
             departure_location=fake.city(),
-            destination=fake.city(),
+            destination=fake.random_element(destinations_list),
             departure_time=datetime.now(timezone.utc) + timedelta(days=fake.random_int(min=1, max=5)),
             price_per_seat=fake.random_int(min=2, max=8),
             is_available=True
         )
-        for _ in range(10)
+        for _ in range(70)
     ]
     db.add_all(rides)
     await db.commit()
@@ -76,7 +97,7 @@ async def seed_bookings(db: AsyncSession, users, rides):
             total_price=fake.random_int(min=10, max=2000),
             status=fake.random_element(["pending", "confirmed", "completed"]),
         )
-        for _ in range(10)
+        for _ in range(40)
     ]
     db.add_all(bookings)
     await db.commit()
