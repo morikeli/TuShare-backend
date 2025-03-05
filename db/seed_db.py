@@ -34,6 +34,7 @@ async def seed_users(db: AsyncSession):
             gender=random.choice(["Male", "Female"]),
             email=fake.email(),
             password=hashed_password,
+            role=random.choice(["driver", "passenger"])
         )
         users.append(user)
 
