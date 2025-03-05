@@ -70,16 +70,28 @@ http://localhost:8000/docs
 ```
 📦project-root
 │
+├── 📄 auth.py
+├── 📄 config.py
 ├── 📄 main.py
 ├── 📄 models.py
-├── 📄 schemas.py
+├── 📄 __init__.py
 ├── 📄 database.py
+│   └── 📄 __init__.py
+│   └── 📄 database.py
+│   └── 📄 schemas.py
+│   └── 📄 seed_db.py
 ├── 📄 routes
+│   └── 📄 __init__.py
+│   └── 📄 rides.py
 │   └── 📄 users.py
-├── 📂 uploads
+├── 📂 media
+│   └── 📂 dps
 ├── 📄 .env
+├── 📄 .gitignore
+├── ⚙️ alembic.ini
 ├── 📄 requirements.txt
 └── 📄 README.md
+├── 📄 utils.py
 ```
 
 ---
