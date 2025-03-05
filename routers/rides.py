@@ -4,7 +4,7 @@ from sqlalchemy.future import select
 from sqlalchemy.exc import IntegrityError
 from db.database import get_db
 from db.schemas import RideCreate, RideResponse
-from models import Ride, User
+from models import Booking, Ride, User
 from utils import get_current_user
 
 router = APIRouter()
