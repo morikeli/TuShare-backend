@@ -52,7 +52,7 @@ class Ride(Base):
     vehicle_model = Column(String, nullable=True)
     vehicle_plate = Column(String, nullable=False, unique=True)
     available_seats = Column(Integer, nullable=False)
-    departure_location = Column(String, nullable=False)
+    departure_location = Column(String, nullable=False)     # pickup point
     destination = Column(String, nullable=False)
     departure_time = Column(DateTime, nullable=False)
     price_per_seat = Column(Float, nullable=False)
