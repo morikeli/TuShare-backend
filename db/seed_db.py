@@ -18,7 +18,7 @@ async def seed_users(db: AsyncSession):
         gender = random.choice(['Male', 'Female'])
 
         if gender == "Male":
-            first_name = fake.first_name_male().lower()
+            first_name = fake.first_name_male().lower()     # generate first name for male users
         else:
             first_name = fake.first_name_female().lower()
         
