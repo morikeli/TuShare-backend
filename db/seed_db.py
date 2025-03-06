@@ -22,6 +22,7 @@ async def seed_users(db: AsyncSession):
         separator = random.choice([".", "_"])
         
         username = f"{first_name}{separator}{last_name}"
+        twitter_username = f'{separator}{username}'
         raw_password = "defaultpassword"
         hashed_password = get_password_hash(raw_password)
         
