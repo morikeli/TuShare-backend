@@ -126,3 +126,4 @@ class RideResponse(RideCreate):
     id: str  # Ride ID
     driver_id: str  # Driver's user ID
     driver_name: str  # Driver's full name
+    driver_profile_image: Optional[str] = None  # Add profile picture field
