@@ -14,7 +14,7 @@ async def seed_users(db: AsyncSession):
     """Create fake users."""
     users = []
 
-    for _ in range(50):
+    for index, _ in enumerate(range(100)):
         first_name = fake.first_name().lower()
         last_name = fake.last_name().lower()
         
