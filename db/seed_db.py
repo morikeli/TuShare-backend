@@ -260,17 +260,21 @@ async def seed_rides(db: AsyncSession, users):
             price_per_seat=fake.random_int(min=2, max=8),
             is_available=True
         )
-        for _ in range(70)
-    ]
+        rides.append(ride)
+        print(f'Generating info for ride {index}')
+
     db.add_all(rides)
     await db.commit()
+    print('🚗 Ride requests created and saved succesfully!')
     return rides
 
 
 async def seed_bookings(db: AsyncSession, users, rides):
     """Create fake bookings."""
     bookings = [
-        Booking(
+    ]
+    for index, _ in enumerate(range(75)):
+        booking = Booking(
             id=str(uuid.uuid4().hex),
             ride_id=fake.random_element(rides).id,
             passenger_id=fake.random_element(users).id,
@@ -278,10 +282,13 @@ async def seed_bookings(db: AsyncSession, users, rides):
             total_price=fake.random_int(min=10, max=2000),
             status=fake.random_element(["pending", "confirmed", "completed"]),
         )
-        for _ in range(40)
-    ]
+        bookings.append(booking)
+        print(f'Generating info for booking {index}')
+
+
     db.add_all(bookings)
     await db.commit()
+    print('Booking created and saved successfully!')
 
 
 async def main():
