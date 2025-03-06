@@ -40,7 +40,7 @@ async def seed_users(db: AsyncSession):
             first_name=first_name.capitalize(),
             last_name=last_name.capitalize(),
             username=username,
-            gender=random.choice(["Male", "Female"]),
+            gender=gender,
             email=fake.email(),
             mobile_number=fake.phone_number(),
             password=hashed_password,
