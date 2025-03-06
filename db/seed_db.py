@@ -15,8 +15,16 @@ async def seed_users(db: AsyncSession):
     users = []
 
     for index, _ in enumerate(range(100)):
-        first_name = fake.first_name().lower()
+        gender = random.choice(['Male', 'Female'])
+
+        if gender == "Male":
+            first_name = fake.first_name_male().lower()
+        else:
+            first_name = fake.first_name_female().lower()
+        
         last_name = fake.last_name().lower()
+        # first_name = fake.first_name().lower()
+        # last_name = fake.last_name().lower()
         
         # Randomly choose between dot (.) or underscore (_)
         separator = random.choice([".", "_"])
