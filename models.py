@@ -69,6 +69,13 @@ class Ride(Base):
         .scalar_subquery()
     )
 
+    # Auto-fetch driver's profile picture when querying data
+    driver_profile_image = column_property(
+        select(User.profile_image)
+        .where(User.id == driver_id)
+        .scalar_subquery()
+    )
+
 
 class Booking(Base):
     """ Represents a booking made by a passenger. """
