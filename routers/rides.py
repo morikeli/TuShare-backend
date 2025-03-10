@@ -5,7 +5,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 from sqlalchemy.sql.expression import func
 from db.database import get_db
-from db.schemas import RideCreate, RideResponse
+from db.schemas import PassengerResponse, RideCreate, RideResponse
 from models import Booking, Ride, User
 from utils import get_current_user
 
