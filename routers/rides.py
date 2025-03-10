@@ -32,12 +32,46 @@ async def get_available_rides(destination: str, db: AsyncSession = Depends(get_d
 
 @router.get("/rides/booked", response_model=list[RideResponse])
 async def get_user_booked_rides(db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user),):
-    """ Get all rides booked by the current user. """
-    stmt = select(Ride).where(Ride.booked_by == current_user.id)
+    """ Get all rides booked by the current user along with the passengers. """
+    
+    # Fetch all rides booked by the current user
+    stmt = select(Ride).join(Booking, Ride.id == Booking.ride_id).where(Booking.passenger_id == current_user.id)
     result = await db.execute(stmt)
     booked_rides = result.scalars().all()
 
-    return booked_rides
+    # Query all rides booked by the current user, where each ride includes all passengers who booked that ride
+    stmt = (
+        select(User.first_name, User.last_name, Ride.departure_location, User.profile_image, Booking.ride_id)
+        .join(Booking, Booking.passenger_id == User.id)
+        .join(Ride, Booking.ride_id == Ride.id)
+        .where(Booking.ride_id.in_([ride.id for ride in booked_rides]))
+    )
+
+    passenger_results = await db.execute(stmt)
+
+    # Organize passengers by ride_id
+    passengers_by_ride = {}
+    for row in passenger_results.all():
+        passenger = PassengerResponse(
+            name=f"{row.first_name} {row.last_name}",
+            departure_location=row.departure_location,
+            profile_image=row.profile_image
+        )
+        passengers_by_ride.setdefault(row.ride_id, []).append(passenger)
+
+    # Use `.model_dump()` to automatically map Ride object fields
+    # Convert ORM objects to dict before using Pydantic model
+    ride_responses = [
+        RideResponse(
+            **{column.name: getattr(ride, column.name) for column in ride.__table__.columns},
+            driver_name=ride.driver_name,
+            driver_profile_image=ride.driver_profile_image,
+            passengers=passengers_by_ride.get(ride.id, [])
+        )
+        for ride in booked_rides
+    ]
+
+    return ride_responses
 
 
 @router.post("/{ride_id}/book", status_code=status.HTTP_201_CREATED, response_model=RideResponse)
