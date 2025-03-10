@@ -121,9 +121,20 @@ class RideCreate(BaseModel):
         from_attributes = True
 
 
+class PassengerResponse(BaseModel):
+    """ Schema for returning passenger details. """
+    name: str
+    departure_location: str
+    profile_image: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
 class RideResponse(RideCreate):
     """ This schema returns a response object when booking or creating rides. """
     id: str  # Ride ID
     driver_id: str  # Driver's user ID
     driver_name: str  # Driver's full name
     driver_profile_image: Optional[str] = None  # Add profile picture field
+    passengers: List[PassengerResponse] = []  # List of passengers
