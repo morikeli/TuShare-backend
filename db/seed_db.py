@@ -1,12 +1,13 @@
 import asyncio
+import random
 import uuid
 from datetime import datetime, timedelta, timezone
 from faker import Faker
 from sqlalchemy.ext.asyncio import AsyncSession
 from utils import get_password_hash
 from .database import AsyncSessionLocal, init_db
-from models import User, Ride, Booking
-import random
+from models import Message, User, Ride, Booking
+
 
 fake = Faker()
 
