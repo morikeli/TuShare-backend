@@ -300,6 +300,30 @@ async def seed_bookings(db: AsyncSession, users, rides):
     print('Booking created and saved successfully!')
 
 
+async def seed_messages(db: AsyncSession, users, rides):
+    """Create fake messages between users."""
+    messages = []
+
+    for index in range(200):    # Generate 200 messages
+        sender = random.choice(users)
+        receiver = random.choice([user for user in users if user.id != sender.id])      # Ensure sender != receiver
+
+        message = Message(
+            id=str(uuid.uuid4().hex),
+            sender_id=sender.id,
+            receiver_id=receiver.id,
+            ride_id=fake.random_element(rides).id,
+            content=fake.sentence(),
+            timestamp=datetime.now(timezone.utc) - timedelta(minutes=random.randint(1, 1000)),
+        )
+        messages.append(message)
+        print(f'Generating message {index}')
+
+    db.add_all(messages)
+    await db.commit()
+    print('💬 Messages generated successfully!')
+
+
 async def main():
     """Run all seeding functions."""
     async with AsyncSessionLocal() as db:
