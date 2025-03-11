@@ -1,12 +1,13 @@
 # 🚀 TuShare (ride-sharing app) API
-
-This is a FastAPI-based RESTful API for user signup and profile management. The API serves the [TuShare mobile app](https://github.com/morikeli/TuShare) and allows allows users to create accounts, login, view or edit their profile. 
+This FastAPI-based RESTful API powers the [TuShare mobile app](https://github.com/morikeli/TuShare).
 
 ## 📋 Features
 
-- Create a new user account with required fields: first name, last name, username, email, gender, and password.
-- Optional profile image upload.
+- Authentication - login, signup & logout
+- Profile management - view and update user profile
 - Password hashing for enhanced security.
+- Book rides, search for available rides and view booked rides
+- In-app messaging between passengers and drivers
 - Database integration using SQLAlchemy.
 - Error handling for unique constraint violations.
 
