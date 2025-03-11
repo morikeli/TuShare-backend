@@ -138,3 +138,41 @@ class RideResponse(RideCreate):
     driver_name: str  # Driver's full name
     driver_profile_image: Optional[str] = None  # Add profile picture field
     passengers: List[PassengerResponse] = []  # List of passengers
+
+
+class MessageBase(BaseModel):
+    """Base schema for messages."""
+    sender_id: UUID
+    receiver_id: UUID
+    content: str
+
+class MessageCreate(BaseModel):
+    """ Base schema for sending a new message. """
+    sender_id: str
+    receiver_id: str
+    ride_id: Optional[str]  # Support ride-based chat
+    content: str
+
+
+class UserResponse(BaseModel):
+    """ This is a schema for sender or reciever user profile. """
+    id: str
+    first_name: str
+    last_name: str
+    profile_image: Optional[str]
+
+    class Config:
+        from_attributes = True  # Enables ORM conversion
+
+
+class MessageResponse(BaseModel):
+    id: str
+    content: str
+    timestamp: datetime
+    ride_id: str
+    driver_name: str
+    driver_profile_image: Optional[str]
+    group_members: List[UserResponse]  # list of passengers in the group chat
+
+    class Config:
+        from_attributes = True
