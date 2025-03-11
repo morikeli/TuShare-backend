@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from db.database import init_db
 from auth import router as auth_router
+from routers.messages import router as msg_router
 from routers.users import router as users_router
 from routers.rides import router as rides_router
 from fastapi.staticfiles import StaticFiles
@@ -36,3 +37,4 @@ app.mount("/media/dps", StaticFiles(directory="media/dps"), name="uploads")
 app.include_router(auth_router, prefix='/api/v1/auth')
 app.include_router(users_router, prefix='/api/v1/users')
 app.include_router(rides_router, prefix='/api/v1')
+app.include_router(msg_router, prefix='/api/v1')
