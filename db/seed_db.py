@@ -327,7 +327,7 @@ async def seed_messages(db: AsyncSession, users, rides):
 async def main():
     """Run all seeding functions."""
     async with AsyncSessionLocal() as db:
-        await init_db()  # Ensure database tables are created
+        await init_db()     # Ensure database tables are created
         users = await seed_users(db)
         rides = await seed_rides(db, users)
         await seed_bookings(db, users, rides)
