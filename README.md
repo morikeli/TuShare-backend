@@ -13,7 +13,7 @@ This FastAPI-based RESTful API powers the [TuShare mobile app](https://github.co
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech stack
 
 - **FastAPI** - Python web framework for building REST APIs.
 - **SQLite** - Database for data persistence.
@@ -66,7 +66,7 @@ http://localhost:8000/docs
 
 ---
 
-## 🗂️ Project Structure
+## 🗂️ Project structure
 
 ```
 📦project-root
