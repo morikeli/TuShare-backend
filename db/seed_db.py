@@ -280,8 +280,8 @@ async def seed_rides(db: AsyncSession, users):
 
 async def seed_bookings(db: AsyncSession, users, rides):
     """Create fake bookings."""
-    bookings = [
-    ]
+    bookings = []
+    
     for index, _ in enumerate(range(75)):
         booking = Booking(
             id=str(uuid.uuid4().hex),
