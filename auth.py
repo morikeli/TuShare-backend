@@ -18,7 +18,7 @@ import uuid
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-router = APIRouter()
+router = APIRouter(tags=['Authentication'])
 
 
 @router.post("/login", status_code=status.HTTP_200_OK, response_model=LoginResponse)

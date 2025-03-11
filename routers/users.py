@@ -13,7 +13,7 @@ import json
 import os
 
 
-router = APIRouter()
+router = APIRouter(tags=['Users'])
 
 
 @router.get("/profile", response_model=UserProfile)

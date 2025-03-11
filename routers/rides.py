@@ -9,7 +9,8 @@ from db.schemas import PassengerResponse, RideCreate, RideResponse
 from models import Booking, Ride, User
 from utils import get_current_user
 
-router = APIRouter()
+
+router = APIRouter(tags=['Rides'])
 
 
 @router.get("/rides", response_model=list[RideResponse])
