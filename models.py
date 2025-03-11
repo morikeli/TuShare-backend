@@ -33,6 +33,7 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     last_login = Column(DateTime, nullable=True)
     date_joined = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     # New field to determine if user is a driver or passenger
     role = Column(Enum("passenger", "driver", name="user_role"), default="passenger", nullable=False)
@@ -57,6 +58,7 @@ class Ride(Base):
     departure_time = Column(DateTime, nullable=False)
     price_per_seat = Column(Float, nullable=False)
     is_available = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     role = Column(Enum("passenger", "driver", name="user_role"), default="passenger", nullable=False)
     # Relationships
     driver = relationship("User", back_populates="rides")
@@ -87,6 +89,7 @@ class Booking(Base):
     seats_booked = Column(Integer, nullable=False)
     total_price = Column(Float, nullable=False)
     status = Column(Enum("pending", "confirmed", "canceled", "completed", name="booking_status"), default="pending")
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     # Relationships
     ride = relationship("Ride", back_populates="bookings")
