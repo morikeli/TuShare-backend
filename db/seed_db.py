@@ -331,6 +331,7 @@ async def main():
         users = await seed_users(db)
         rides = await seed_rides(db, users)
         await seed_bookings(db, users, rides)
+        await seed_messages(db, users, rides)
         print("✅ Database seeded successfully!")
 
 
