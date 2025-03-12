@@ -92,7 +92,11 @@ async def get_group_messages(user_id: str, db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/{driver_id}/get")
-async def get_group_messages(driver_id: str, db: AsyncSession = Depends(get_db)):
+async def get_group_chats(driver_id: str, db: AsyncSession = Depends(get_db)):
+    """ 
+        This router gets group messages for all passengers and driver sharing the same ride. 
+        The messages are displayed in the group's chat screen.
+    """
 
     # Get the latest ride posted by this driver (assuming only one ride is relevant)
     ride_query = select(Ride).where(Ride.driver_id == driver_id).order_by(Ride.created_at.desc())
