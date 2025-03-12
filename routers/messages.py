@@ -1,9 +1,9 @@
 from db.database import get_db
-from db.schemas import MessageCreate, MessageResponse, UserResponse
+from db.schemas import GroupChatResponse, MessageCreate, MessageResponse
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import joinedload
+from sqlalchemy.sql import func
 from typing import List
 from models import Booking, Message, Ride, User
 
