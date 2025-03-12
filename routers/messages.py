@@ -22,9 +22,77 @@ async def send_message(message: MessageCreate, db: AsyncSession = Depends(get_db
     return new_message
 
 
+@router.get("/group-messages/{user_id}", response_model=List[GroupChatResponse])
+async def get_group_messages(user_id: str, db: AsyncSession = Depends(get_db)):
+    """ 
+    Fetch group chats for the logged-in user with latest message & unread count. 
+    """
+
+    # Get rides where the user is a driver
+    driver_rides_query = select(Ride.id).where(Ride.driver_id == user_id)
+    driver_rides = list((await db.execute(driver_rides_query)).scalars())
+
+    # Get rides where the user is a passenger
+    passenger_rides_query = select(Booking.ride_id).where(Booking.passenger_id == user_id)
+    passenger_rides = list((await db.execute(passenger_rides_query)).scalars())
+
+    # Combine all relevant rides
+    all_ride_ids = set(driver_rides + passenger_rides)
+
+    if not all_ride_ids:
+        return []  # No group chats
+
+    # Fetch latest message for each group chat
+    latest_messages_query = (
+        select(
+            Message.ride_id,
+            Message.content.label("latest_message"),
+            Message.timestamp.label("latest_timestamp"),
+        )
+        .where(Message.ride_id.in_(all_ride_ids))
+        .order_by(Message.ride_id, Message.timestamp.desc())
+    )
+
+    latest_messages = {}
+    result = await db.execute(latest_messages_query)
+    for row in result:
+        if row.ride_id not in latest_messages:
+            latest_messages[row.ride_id] = {
+                "latest_message": row.latest_message,
+                "latest_timestamp": row.latest_timestamp,
+            }
+
+    # Get unread message count per ride
+    unread_count_query = (
+        select(Message.ride_id, func.count(Message.id).label("unread_count"))
+        .where(Message.ride_id.in_(all_ride_ids), Message.receiver_id == user_id, Message.is_read == False)
+        .group_by(Message.ride_id)
+    )
+
+    unread_counts = {row.ride_id: row.unread_count for row in (await db.execute(unread_count_query)).all()}
+
+    # Get ride details (driver info)
+    rides_query = select(Ride).where(Ride.id.in_(all_ride_ids))
+    rides = list((await db.execute(rides_query)).scalars())
+
+    # Build the response using Pydantic schema
+    group_chats = [
+        GroupChatResponse(
+            ride_id=ride.id,
+            driver_name=ride.driver_name,
+            driver_profile_image=ride.driver_profile_image,
+            latest_message=latest_messages.get(ride.id, {}).get("latest_message", "No messages yet"),
+            latest_timestamp=latest_messages.get(ride.id, {}).get("latest_timestamp"),
+            unread_count=unread_counts.get(ride.id, 0),
+        )
+        for ride in rides
+    ]
+
+    return group_chats
+
+
 @router.get("/{driver_id}/get")
 async def get_group_messages(driver_id: str, db: AsyncSession = Depends(get_db)):
-    """ This router gets group messages for passengers and driver sharing the same ride. """
 
     # Get the latest ride posted by this driver (assuming only one ride is relevant)
     ride_query = select(Ride).where(Ride.driver_id == driver_id).order_by(Ride.created_at.desc())
