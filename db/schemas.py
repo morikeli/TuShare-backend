@@ -176,3 +176,12 @@ class MessageResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class GroupChatResponse(BaseModel):
+    ride_id: str
+    driver_name: str
+    driver_profile_image: Optional[str]
+    latest_message: str
+    latest_timestamp: Optional[datetime] 
+    unread_count: int
