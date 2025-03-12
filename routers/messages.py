@@ -168,3 +168,31 @@ async def get_group_chats(driver_id: str, db: AsyncSession = Depends(get_db)):
     }
 
     return response_data
+
+
+@router.put("/mark-as-read/{user_id}/{ride_id}")
+async def mark_messages_as_read(user_id: str, ride_id: str, db: AsyncSession = Depends(get_db)):
+    """
+        Marks all unread messages in a specific group chat (ride) as read for the given user.
+    """
+    # Fetch unread messages for this user in the specified ride
+    result = await db.execute(
+        select(Message)
+        .where(
+            Message.ride_id == ride_id,  # Ride chat
+            Message.receiver_id == user_id,  # Messages meant for this user
+            Message.is_read == False  # Only unread messages
+        )
+    )
+
+    unread_messages = result.scalars().all()
+
+    if not unread_messages:
+        return {"message": "No unread messages."}
+
+    # Update messages to mark them as read
+    for msg in unread_messages:
+        msg.is_read = True
+
+    await db.commit()
+    return {"message": f"{len(unread_messages)} messages marked as read."}
