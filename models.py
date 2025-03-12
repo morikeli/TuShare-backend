@@ -122,7 +122,8 @@ class Message(Base):
     content = Column(String, nullable=False)    # message text
     timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc))    # timestamp when the message was sent
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    
+    is_read = Column(Boolean, default=False)  
+
     # relationships to the User model 
     sender = relationship("User", foreign_keys=[sender_id])
     receiver = relationship("User", foreign_keys=[receiver_id], lazy='joined')
