@@ -38,8 +38,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
     return LoginResponse(
         access_token=access_token,
         token_type="bearer",
-        username=user.username,
-        last_login=user.last_login
     )
 
 
