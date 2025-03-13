@@ -34,7 +34,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
     user.last_login = datetime.now(timezone.utc)
     await db.commit()
 
-    access_token = create_access_token(data={"sub": user.username})     # generate access token
+    access_token = create_access_token(data={"sub": user.username, "user": user.id, "last_login": user.last_login})     # generate access token
     return LoginResponse(
         access_token=access_token,
         token_type="bearer",
