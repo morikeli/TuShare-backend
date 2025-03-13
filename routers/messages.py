@@ -91,23 +91,24 @@ async def get_group_messages(user_id: str, db: AsyncSession = Depends(get_db)):
     return group_chats
 
 
-@router.get("/{driver_id}/get")
-async def get_group_chats(driver_id: str, db: AsyncSession = Depends(get_db)):
+@router.get("/{ride_id}/get")
+async def get_group_chats(ride_id: str, db: AsyncSession = Depends(get_db)):
     """ 
-        This router gets group messages for all passengers and driver sharing the same ride. 
-        The messages are displayed in the group's chat screen.
+    Get group messages for all passengers and the driver sharing the same ride.
+    The messages are displayed in the group's chat screen.
     """
 
-    # Get the latest ride posted by this driver (assuming only one ride is relevant)
-    ride_query = select(Ride).where(Ride.driver_id == driver_id).order_by(Ride.created_at.desc())
+    # Get the ride details
+    ride_query = select(Ride).where(Ride.id == ride_id)
     ride = (await db.execute(ride_query)).scalar_one_or_none()
 
     if not ride:
-        raise HTTPException(status_code=404, detail="Driver has no active rides.")
+        raise HTTPException(status_code=404, detail="Ride not found.")
 
     # Get driver details
-    driver_query = select(User).where(User.id == driver_id)
+    driver_query = select(User).where(User.id == ride.driver_id)
     driver = (await db.execute(driver_query)).scalar_one_or_none()
+    
     if not driver:
         raise HTTPException(status_code=404, detail="Driver not found.")
 
