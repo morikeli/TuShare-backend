@@ -292,32 +292,42 @@ async def seed_bookings(db: AsyncSession, users, rides):
             status=fake.random_element(["pending", "confirmed", "completed"]),
         )
         bookings.append(booking)
-        print(f'Generating info for booking {index}')
+        print(f'Creating a record for booking {index}')
 
 
     db.add_all(bookings)
     await db.commit()
     print('Booking created and saved successfully!')
 
+    return bookings
 
-async def seed_messages(db: AsyncSession, users, rides):
-    """Create fake messages between users."""
+
+async def seed_messages(db: AsyncSession, bookings):
+    """ Create fake messages between passengers who share the same ride. """
     messages = []
+    ride_passenger_map = {}
 
-    for index in range(200):    # Generate 200 messages
-        sender = random.choice(users)
-        receiver = random.choice([user for user in users if user.id != sender.id])      # Ensure sender != receiver
+    # Create a mapping of ride_id to passengers who booked that ride
+    for booking in bookings:
+        if booking.ride_id not in ride_passenger_map:
+            ride_passenger_map[booking.ride_id] = []
+        ride_passenger_map[booking.ride_id].append(booking.passenger_id)
 
-        message = Message(
-            id=str(uuid.uuid4().hex),
-            sender_id=sender.id,
-            receiver_id=receiver.id,
-            ride_id=fake.random_element(rides).id,
-            content=fake.sentence(),
-            timestamp=datetime.now(timezone.utc) - timedelta(minutes=random.randint(1, 1000)),
-        )
-        messages.append(message)
-        print(f'Generating message {index}')
+    for ride_id, passengers in ride_passenger_map.items():
+        if len(passengers) > 1:         # Only generate messages if there are multiple passengers
+            for idx in range(random.randint(1, 30)):           # Each ride's group chat gets 1-30 messages
+                sender, receiver = random.sample(passengers, 2)     # Pick two different passengers
+                
+                message = Message(
+                    id=str(uuid.uuid4().hex),
+                    sender_id=sender,
+                    receiver_id=receiver,
+                    ride_id=ride_id,
+                    content=random.choice([fake.sentence(), fake.paragraph(nb_sentences=3)]),
+                    timestamp=datetime.now(timezone.utc) - timedelta(minutes=random.randint(1, 1000)),
+                )
+                messages.append(message)
+                print(f'Generating message {idx}')
 
     db.add_all(messages)
     await db.commit()
