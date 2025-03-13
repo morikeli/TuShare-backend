@@ -340,8 +340,8 @@ async def main():
         await init_db()     # Ensure database tables are created
         users = await seed_users(db)
         rides = await seed_rides(db, users)
-        await seed_bookings(db, users, rides)
-        await seed_messages(db, users, rides)
+        bookings = await seed_bookings(db, users, rides)
+        await seed_messages(db, bookings)
         print("✅ Database seeded successfully!")
 
 
