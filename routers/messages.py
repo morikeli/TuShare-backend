@@ -22,7 +22,7 @@ async def send_message(message: MessageCreate, db: AsyncSession = Depends(get_db
     return new_message
 
 
-@router.get("/group-messages/{user_id}", response_model=List[GroupChatResponse])
+@router.get("/{user_id}/messages", response_model=List[GroupChatResponse])
 async def get_group_messages(user_id: str, db: AsyncSession = Depends(get_db)):
     """ 
     Fetch group chats for the logged-in user with latest message & unread count. 
