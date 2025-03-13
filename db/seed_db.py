@@ -54,7 +54,7 @@ async def seed_users(db: AsyncSession):
             instagram_handle=f'thee.{username}',
         )
         users.append(user)
-        print(f'Generating info for user {index}')
+        print(f"Creating user {index}'s profile.")
 
     db.add_all(users)
     await db.commit()
@@ -270,7 +270,7 @@ async def seed_rides(db: AsyncSession, users):
             is_available=True
         )
         rides.append(ride)
-        print(f'Generating info for ride {index}')
+        print(f'Creating ride {index}')
 
     db.add_all(rides)
     await db.commit()
