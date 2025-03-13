@@ -146,26 +146,28 @@ async def get_group_chats(ride_id: str, db: AsyncSession = Depends(get_db)):
     ]
 
     # Format response
-    response_data = {
-        "ride_id": ride.id,
-        "driver_name": driver_name,
-        "driver_profile_image": driver_profile_image,
-        "messages": [
-            {
-                "id": msg.id,
-                "content": msg.content,
-                "timestamp": msg.timestamp,
-                "sender": {
-                    "id": sender.id,
-                    "first_name": sender.first_name,
-                    "last_name": sender.last_name,
-                    "profile_image": sender.profile_image,
-                },
-            }
-            for msg, sender in messages
-        ],
-        "group_members": group_members,     # Add group members separately
-    }
+    response_data = [
+        {
+            "ride_id": ride.id,
+            "driver_name": driver_name,
+            "driver_profile_image": driver_profile_image,
+            "messages": [
+                {
+                    "id": msg.id,
+                    "content": msg.content,
+                    "timestamp": msg.timestamp,
+                    "sender": {
+                        "id": sender.id,
+                        "first_name": sender.first_name,
+                        "last_name": sender.last_name,
+                        "profile_image": sender.profile_image,
+                    },
+                }
+                for msg, sender in messages
+            ],
+            "group_members": group_members,     # Add group members separately
+        }
+    ]
 
     return response_data
 
