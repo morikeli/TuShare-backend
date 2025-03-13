@@ -161,11 +161,10 @@ async def get_group_chats(ride_id: str, db: AsyncSession = Depends(get_db)):
                     "last_name": sender.last_name,
                     "profile_image": sender.profile_image,
                 },
-                "group_members": group_members,
             }
             for msg, sender in messages
         ],
-
+        "group_members": group_members,     # Add group members separately
     }
 
     return response_data
