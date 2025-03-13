@@ -12,8 +12,6 @@ class LoginResponse(BaseModel):
     """ This is a login response schema. It returns json data with the fields below. """
     access_token: str
     token_type: str
-    username: str
-    last_login: Optional[datetime]
 
 
 class CreateUser(BaseModel):
