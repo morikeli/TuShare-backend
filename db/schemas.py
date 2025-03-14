@@ -154,7 +154,7 @@ class MessageCreate(BaseModel):
     Used when sending a message between users.
     """
     sender_id: str  # Sender's unique ID
-    receiver_id: str  # Receiver's unique ID
+    receiver_id: Optional[str] = None  # Receiver's unique ID
     ride_id: Optional[str]  # If the message is part of a ride-based group chat
     content: str  # Message content
 
