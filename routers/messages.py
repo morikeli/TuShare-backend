@@ -11,7 +11,7 @@ from models import Booking, Message, Ride, User
 router = APIRouter(prefix='/message', tags=['Messages'])
 
 
-@router.post("/send", response_model=MessageResponse)
+@router.post("/send", response_model=MessageCreate)
 async def send_message(message: MessageCreate, db: AsyncSession = Depends(get_db)):
     """ This is a router to send messages to other users - driver or passengers. """
 
