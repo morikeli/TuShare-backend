@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -14,7 +14,7 @@ router = APIRouter(tags=['Rides'])
 
 
 @router.get("/rides", response_model=list[RideResponse])
-async def get_available_rides(destination: str, db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user),):
+async def get_available_rides(destination: str = Query(None), db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user),):
     """ Get all available rides that are not booked. """
     stmt = (
         select(Ride)
