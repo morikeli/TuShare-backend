@@ -14,9 +14,10 @@ router = APIRouter(tags=['Rides'])
 
 
 @router.get("/rides", response_model=list[RideResponse])
-async def get_available_rides(destination: str = Query(None), db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user),):
+async def get_available_rides(destination: str = Query(None), db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user)):
     """ Get all available rides that are not booked. """
 
+    # raise HTTP 404 if destination isn't provided
     if destination is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Destination not found")
 
