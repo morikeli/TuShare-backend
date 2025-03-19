@@ -19,11 +19,12 @@ async def get_available_rides(destination: str = Query(None), db: AsyncSession =
     stmt = (
         select(Ride)
         .options(joinedload(Ride.driver))  # Auto-load driver details
-        .where(
-            func.lower(Ride.destination).ilike(f"%{destination.lower()}%"),     # case-insensitive destination
-            Ride.available_seats > 0
-        )
+        .where(Ride.available_seats > 0)
     )
+
+    # only filter by destination if it's provided
+    if destination:
+        stmt = stmt.where(func.lower(Ride.destination).ilike(f"%{destination.lower()}%"))
 
     
     result = await db.execute(stmt)
