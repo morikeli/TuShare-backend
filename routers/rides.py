@@ -16,16 +16,18 @@ router = APIRouter(tags=['Rides'])
 @router.get("/rides", response_model=list[RideResponse])
 async def get_available_rides(destination: str = Query(None), db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user),):
     """ Get all available rides that are not booked. """
+
+    if destination is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Destination not found")
+
     stmt = (
         select(Ride)
         .options(joinedload(Ride.driver))  # Auto-load driver details
-        .where(Ride.available_seats > 0)
+        .where(
+            func.lower(Ride.destination).ilike(f"%{destination.lower()}%"),     # case-insensitive destination
+            Ride.available_seats > 0
+        )
     )
-
-    # only filter by destination if it's provided
-    if destination:
-        stmt = stmt.where(func.lower(Ride.destination).ilike(f"%{destination.lower()}%"))
-
     
     result = await db.execute(stmt)
     rides = result.scalars().all() 
