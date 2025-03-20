@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from db.database import get_db
-from db.schemas import UpdateUserProfile, UserProfile
+from schemas.user_schema import UpdateUserProfile, UserProfile
 from config import UPLOAD_DIR
 from models import User
 from utils import get_current_user
