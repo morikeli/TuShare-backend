@@ -80,8 +80,7 @@ async def get_user_booked_rides(db: AsyncSession = Depends(get_db), current_user
 
 
 @router.post("/{ride_id}/book", status_code=status.HTTP_201_CREATED, response_model=RideResponse)
-async def book_ride(ride_id: str,  db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user),
-):
+async def book_ride(ride_id: str,  db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user)):
     """ Book an available ride. """
     # Fetch the ride with the driver info
     q_stmt = select(Ride, User).join(User, Ride.driver_id == User.id).where(Ride.id == ride_id)
