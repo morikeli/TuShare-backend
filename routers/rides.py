@@ -138,6 +138,10 @@ async def book_ride(ride_id: str,  db: AsyncSession = Depends(get_db), current_u
     except IntegrityError:
         await db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Booking failed")
+    
+    except Exception:       # catch any other error
+        await db.rollback()
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Booking failed")
 
 
 @router.post("/rides/new-ride", status_code=status.HTTP_201_CREATED, response_model=RideResponse)
