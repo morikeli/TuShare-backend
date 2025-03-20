@@ -6,7 +6,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.future import select
 from config import UPLOAD_DIR
 from db.database import get_db
-from schemas.auth_schema import CreateUser, LoginResponse
+from schemas.auth_schema import LoginResponse
+from schemas.user_schema import CreateUser
 from models import TokenBlacklist, User
 from utils import get_current_user, verify_password, create_access_token
 from utils import get_password_hash
