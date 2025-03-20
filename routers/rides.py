@@ -107,9 +107,7 @@ async def book_ride(ride_id: str,  db: AsyncSession = Depends(get_db), current_u
     existing_booking = await db.execute(booking_stmt)
 
     if existing_booking.scalars().first():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="You have already booked this ride"
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="You have already booked this ride.")
 
     # Create a new booking
     new_booking = Booking(
