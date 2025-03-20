@@ -79,20 +79,19 @@ async def get_user_booked_rides(db: AsyncSession = Depends(get_db), current_user
     return ride_responses
 
 
-@router.post("/{ride_id}/book", status_code=status.HTTP_201_CREATED, response_model=RideResponse)
+@router.post("/{ride_id}/book", status_code=status.HTTP_201_CREATED, response_model=RideCreate)
 async def book_ride(ride_id: str,  db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user)):
     """ Book an available ride. """
     # Fetch the ride with the driver info
-    q_stmt = select(Ride, User).join(User, Ride.driver_id == User.id).where(Ride.id == ride_id)
+    q_stmt = select(Ride).options(joinedload(Ride.driver)).where(Ride.id == ride_id)
     result = await db.execute(q_stmt)
-    ride_data = result.first()
+    ride = result.scalars().first()
 
     
-    if not ride_data:
+    if not result:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ride not found")
-
-    ride, driver = ride_data
-    driver_name = driver.first_name + driver.last_name
+    
+    driver_name = ride.driver.first_name + ride.driver.last_name
 
     # Prevent drivers from booking their own rides
     if ride.driver_id == current_user.id:
