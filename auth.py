@@ -12,7 +12,6 @@ from models import TokenBlacklist, User
 from utils import get_current_user, verify_password, create_access_token
 from utils import get_password_hash
 from datetime import datetime, timezone
-from pathlib import Path
 import aiofiles
 import os
 import uuid
