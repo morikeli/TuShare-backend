@@ -1,5 +1,5 @@
 from db.database import get_db
-from db.schemas import GroupChatResponse, MessageCreate, MessageResponse
+from schemas.messages_schema import GroupChatResponse, MessageCreate, MessageResponse
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
