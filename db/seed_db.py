@@ -262,7 +262,7 @@ async def seed_rides(db: AsyncSession, users):
             vehicle_type=fake.random_element(["Sedan", "SUV", "Bike"]),
             vehicle_model=fake.random_element(vehicle_model),
             vehicle_plate=fake.license_plate(),
-            available_seats=fake.random_int(min=1, max=4),
+            available_seats=fake.random_int(min=1, max=3),
             departure_location=fake.city(),
             destination=fake.random_element(destinations_list),
             departure_time=datetime.now(timezone.utc) + timedelta(days=fake.random_int(min=1, max=5)),
