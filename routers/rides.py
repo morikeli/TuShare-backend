@@ -98,7 +98,7 @@ async def book_ride(ride_id: str,  db: AsyncSession = Depends(get_db), current_u
     if ride.driver_id == current_user.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Drivers cannot book their own rides.")
 
-    if ride.available_seats <= 0:
+    if ride.available_seats == 0:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No available seats left.")
     
     # Check if the user has already booked this ride
