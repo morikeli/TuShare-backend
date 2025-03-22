@@ -8,7 +8,7 @@ class RideCreate(BaseModel):
     vehicle_type: str = Field(..., example="Sedan")
     vehicle_model: Optional[str] = Field(None, example="Toyota Corolla")
     vehicle_plate: str = Field(..., example="ABC-1234")
-    available_seats: int = Field(..., gt=0, example=3)
+    available_seats: int = Field(..., ge=0, example=3)
     departure_location: str = Field(..., example="Downtown")   # pickup point
     destination: str = Field(..., example="Airport")
     departure_time: datetime = Field(..., example="2025-03-05T15:30:00")
