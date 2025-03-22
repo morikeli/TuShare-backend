@@ -71,7 +71,6 @@ http://localhost:8000/docs
 ```
 📦project-root
 │
-
 ├── 📄 db
 │   └── 📄 __init__.py
 │   └── 📄 database.py
