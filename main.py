@@ -39,3 +39,29 @@ app.include_router(auth_router, prefix='/api/v1/auth')
 app.include_router(users_router, prefix='/api/v1/users')
 app.include_router(rides_router, prefix='/api/v1')
 app.include_router(msg_router, prefix='/api/v1')
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """
+    Handles all unhandled exceptions globally in the FastAPI application.
+
+    Logs the error details and returns a standardized JSON response with a 
+    status code of 500 (Internal Server Error). This helps avoid exposing 
+    sensitive details to the client while providing useful logs for debugging.
+
+    Args:
+        request (Request): The incoming HTTP request that caused the error.
+        exc (Exception): The unhandled exception that occurred.
+
+    Returns:
+        JSONResponse: A response indicating an internal server error.
+    """
+    # Log the error with full traceback for debugging
+    logger.error(f"Unhandled error: {exc}", exc_info=True)
+
+    # Return a generic error message to the client to prevent exposing internal details
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Oh snap! 😢 Internal server error. Please try again later."},
+    )
