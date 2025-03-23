@@ -1,11 +1,12 @@
-from fastapi import FastAPI
-from db.database import init_db
 from auth import router as auth_router
-from routers.messages import router as msg_router
-from routers.users import router as users_router
-from routers.rides import router as rides_router
-from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
+from db.database import init_db
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from routers.messages import router as msg_router
+from routers.rides import router as rides_router
+from routers.users import router as users_router
 import logging
 
 
