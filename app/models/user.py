@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from sqlalchemy import Boolean, Column, DateTime, Enum, String
-from sqlalchemy.orm import column_property, relationship
+from sqlalchemy.orm import relationship
 
 from ..core.database import Base
 from .base import TimeStampMixin
