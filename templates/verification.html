@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Verify Your Email</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6;">
+    <h2 style="color: #2c3e50;">Welcome to TuShare, {{ user_name }}!</h2>
+    <p>Thank you for signing up. Please verify your email address to activate your account.</p>
+    <p>
+        <a href="{{ verification_link }}" style="display: inline-block; padding: 10px 20px; background-color: #2c3e50; color: white; text-decoration: none; border-radius: 4px;">
+        Verify Email
+        </a>
+    </p>
+    <p>If the button above doesn't work, copy and paste this link into your browser:</p>
+    <p><a href="{{ verification_link }}" target="_blank">{{ verification_link }}</a></p>
+    <br/>
+    <p>Best regards,<br/>The TuShare Team</p>
+</body>
+</html>
