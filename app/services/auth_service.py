@@ -70,7 +70,7 @@ class AuthService:
 
         hashed_password = get_password_hash(user.password)
 
-        # user_data = user.model_dump()
+        # Set the profile image path to the user data
         user_data['profile_image'] = image_path
         user_data['password'] = hashed_password
 
