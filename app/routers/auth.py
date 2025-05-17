@@ -94,7 +94,12 @@ async def create_user(
 
     Returns:
         JSONResponse: A response containing a success message and the created user's data if successful.
-        None: If an exception occurs during user creation, the transaction is rolled back and no response is returned.
+        status_code (int): HTTP status code indicating the result of the operation.
+        201: Account created successfully.
+        500: Internal server error if any error occurs during user creation or email sending.
+        409: User with the provided email already exists.
+        400: Invalid user credentials if the email is already taken or the password is invalid.
+        403: User account not verified if the user tries to access a protected resource without verification.
 
     Raises:
         Exception: Rolls back the database transaction if any error occurs during user creation or email sending.
