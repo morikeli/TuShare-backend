@@ -55,7 +55,7 @@ pip install -r requirements.txt
 4. **Run the FastAPI server:**
 
 ```bash
-uvicorn main:app --reload
+uvicorn app:app --reload
 ```
 
 The server will start at: `http://localhost:8000`
@@ -67,7 +67,9 @@ The server will start at: `http://localhost:8000`
 You can test the API using [Postman](https://www.postman.com/) or the FastAPI interactive docs:
 
 ```
-http://localhost:8000/docs
+http://localhost:8000/api/v1/docs  # swagger docs
+http://localhost:8000/api/v1/redoc  # redoc
+
 ```
 
 ---
