@@ -1,6 +1,12 @@
 # 🚀 TuShare (ride-sharing app) API
 This FastAPI-based RESTful API powers the [TuShare mobile app](https://github.com/morikeli/TuShare).
 
+## Project screenshots
+![Screenshot from 2025-05-17 22-24-08](https://github.com/user-attachments/assets/d5e084bd-2370-4b2d-8197-9e8119e6f489)
+![Screenshot from 2025-05-17 22-24-22](https://github.com/user-attachments/assets/c9bce08f-efb0-427c-b9c3-6c3a6c7dd268)
+![Screenshot from 2025-05-17 22-24-32](https://github.com/user-attachments/assets/2510f77c-f8f1-44bb-9612-a42c6229c5c9)
+
+
 ## 📋 Features
 
 - Authentication - login, signup & logout
