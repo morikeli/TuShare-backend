@@ -105,7 +105,7 @@ async def create_user(
         Exception: Rolls back the database transaction if any error occurs during user creation or email sending.
     """
 
-    # try creating an account for the user and sending verification email
+    # Create an account for the user
     new_user = await service.create_user_account(user, profile_image, db)
 
     # email verification
