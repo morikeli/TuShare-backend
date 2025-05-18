@@ -95,6 +95,10 @@ class UserProfile(BaseModel):
     class Config:
         from_attributes = True
 
+class UserModel(UserProfile):
+    rides: List[RideResponse]
+    bookings: List[BookingResponse]
+
 
 class UpdateUserProfile(BaseModel):
     """ This is a schema to update a user's profile. """
