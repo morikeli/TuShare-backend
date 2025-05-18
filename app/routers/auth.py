@@ -110,14 +110,14 @@ async def create_user(
 
     # email verification
     private_key = create_url_safe_token({"email": new_user.email})
-    email_verification_link = f"http://{Config.DOMAIN}/api/v1/auth/verify/{private_key}"
+    email_verification_link = f"http://{Config.DOMAIN}/api/v1/auth/verify-account/{private_key}"
 
     message = create_message(
         recipients=[new_user.email],
         subject="Verify your email",
         template_body={"user_name": new_user.username, "verification_link": email_verification_link}
     )
-    bg_task.add_task(mail.send_message, message, template_name="verification.html")
+    bg_task.add_task(mail.send_message, message, template_name="email-verification.html")
 
 
     return JSONResponse(
