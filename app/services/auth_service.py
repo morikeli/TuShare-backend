@@ -26,9 +26,12 @@ class AuthService:
         (either email or username).
         """
 
-        stmt = select(User).where(or_(User.email==credentials, User.username==credentials))
+        stmt = select(User).options(
+            selectinload(User.rides),         # Eagerly load rides
+            selectinload(User.bookings)       # Eagerly load bookings
+        ).where(or_(User.email==credentials, User.username==credentials))
         user = (await db.execute(stmt)).scalars().first()
-        print(f"User: {user}")
+
         return user
 
 
