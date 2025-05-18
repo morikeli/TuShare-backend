@@ -129,6 +129,62 @@ async def create_user(
     )
 
 
+@router.post("/request-verification-link")
+async def request_email_verification_link(
+    user_email: RequestEmailVerificationSchema,
+    bg_task: BackgroundTasks,
+    session: AsyncSession = Depends(get_db)
+):
+    """
+    This endpoint allow users to request a verification link to be sent to their email address.
+
+    Args:
+        user_email (RequestEmailVerificationSchema): The schema containing the user's email address.
+        bg_task (BackgroundTasks): FastAPI background task manager for sending emails asynchronously.
+        session (AsyncSession, optional): Database session dependency.
+    Raises:
+        UserNotFoundException: If the user with the provided email does not exist.
+    Returns:
+        JSONResponse:
+            - 200: If the verification email was sent successfully.
+            - 400: If the user's email is already verified.
+    """
+
+    email = user_email.email
+
+    # Check if user exists
+    user = await service.get_user_email(email, session)
+
+    if not user:
+        raise exceptions.UserNotFoundException()
+
+    if user.is_verified:
+        return JSONResponse(
+            status_code=400,
+            content={"message": "Your email is already verified."},
+        )
+
+    # Create signed token
+    token = create_url_safe_token({"email": email})
+    verification_link = f"http://{Config.DOMAIN}/api/v1/auth/verify-account/{token}"
+
+    # Send email
+    message = create_message(
+        recipients=[email],
+        subject="Verify your email",
+        template_body={
+            "user_name": user.username,
+            "verification_link": verification_link
+        }
+    )
+    bg_task.add_task(mail.send_message, message, template_name="email-verification.html")
+
+    return JSONResponse(
+        status_code=200,
+        content={"message": "Verification email sent. Please check your inbox."},
+    )
+
+
 @router.get('/verify/{user_private_key}')
 async def verify_email(user_private_key: str, db: AsyncSession = Depends(get_db)):
     """
