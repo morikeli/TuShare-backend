@@ -1,15 +1,15 @@
 from fastapi import HTTPException, UploadFile, status
 from sqlalchemy import or_
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from .. import exceptions
 from ..core.config import UPLOAD_DIR
 from ..models import User
 from ..schemas import CreateUser
-from ..utils.auth import get_password_hash
+from ..utils.auth import hash_password
 import aiofiles
 import os
 import uuid
@@ -68,7 +68,7 @@ class AuthService:
                     await image_file.write(chunk)
 
 
-        hashed_password = get_password_hash(user.password)
+        hashed_password = hash_password(user.password)
 
         # Set the profile image path to the user data
         user_data['profile_image'] = image_path

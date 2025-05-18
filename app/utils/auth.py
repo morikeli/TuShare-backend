@@ -20,7 +20,7 @@ serializer = URLSafeTimedSerializer(secret_key=Config.SECRET_KEY, salt="email-co
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def get_password_hash(password):
+def hash_password(password):
     """
     Hash a plain password using the configured password hashing context.
 
