@@ -244,6 +244,154 @@ async def verify_email(user_private_key: str, db: AsyncSession = Depends(get_db)
     )
 
 
+@router.get('/refresh-token')
+async def refresh_token(token_data: dict = Depends(RefreshTokenBearer())):
+    """
+    Endpoint to refresh an access token using a valid refresh token.
+
+    Args:
+        token_data (dict): The decoded refresh token data, provided by the RefreshTokenBearer dependency.
+
+    Returns:
+        JSONResponse: A response containing a new access token and a success message if the refresh token is valid and not expired.
+
+    Raises:
+        InvalidTokenException: If the refresh token is invalid or expired.
+    """
+
+    expiry_timestamp = token_data["exp"]
+
+    if datetime.fromtimestamp(expiry_timestamp) > datetime.now():
+        new_access_token = create_access_token(
+            data={
+                "email": token_data["user"]["email"],
+                "user_id": token_data["user"]["user_id"],
+            }
+        )
+
+        return JSONResponse(
+            content={
+                "message": "Access token refreshed successfully!",
+                "access_token": new_access_token,
+            }
+        )
+
+    raise exceptions.InvalidTokenException()
+
+
+@router.get('/user/me', dependencies=[user_role], response_model=UserModel)
+async def get_user_details(user = Depends(get_current_user)):
+    """
+    Retrieve the details of the currently authenticated user. This endpoint returns the user object
+    representing the currently authenticated user.
+
+    Depends on:
+        get_current_user: Dependency that provides the current authenticated user.
+
+    Returns:
+        The user object representing the currently authenticated user.
+    """
+
+    return user
+
+
+@router.post('/reset-password')
+async def reset_password(user_email: ResetPasswordSchema, bg_task: BackgroundTasks, user: User = Depends(get_current_user)):
+    """
+    Handles password reset requests by generating a secure reset link and sending it to the user's email address.
+    Args:
+        user_email (ResetPasswordSchema): The schema containing the user's email address for password reset.
+        bg_task (BackgroundTasks): FastAPI background task manager for sending the email asynchronously.
+        user (User, optional): The currently authenticated user, injected via dependency.
+    Returns:
+        JSONResponse: A response indicating that the password reset instructions have been sent to the user's email.
+    Raises:
+        HTTPException: If the user is not authenticated or the email is invalid.
+    Side Effects:
+        Sends an email with a password reset link to the specified user.
+    """
+
+    email = user_email.email
+
+    private_key = create_url_safe_token({"email": email})
+    reset_password_link = f"http://{Config.DOMAIN}/api/v1/auth/confirm-reset-password/{private_key}"
+
+    message = create_message(
+        recipients=[email],
+        subject="Reset your password",
+        template_body={
+            "user_name": user.username,
+            "reset_password_link": reset_password_link
+        }
+    )
+    bg_task.add_task(mail.send_message, message, template_name="reset_password.html")
+    return JSONResponse(
+        content={
+            "message": "Please check your email for instructions to reset your password.",
+        },
+        status_code=200
+    )
+
+
+@router.post('/confirm-reset-password/{user_private_key}')
+async def confirm_reset_password(
+    user_private_key: str,
+    password: ConfirmResetPasswordSchema,
+    session: AsyncSession = Depends(get_db),
+):
+    """
+    Resets the user's password after confirming the reset token and validating the new password.
+
+    Args:
+        user_private_key (str): The URL-safe token containing user identification (e.g., email).
+        password (ConfirmResetPasswordSchema): Schema containing the new password and its confirmation.
+        session (AsyncSession, optional): Database session dependency.
+
+    Raises:
+        PasswordIsShortException: If the new password is shorter than 8 characters.
+        PasswordsDontMatchException: If the new password and confirmation do not match.
+        UserNotFoundException: If no user is found with the provided email.
+
+    Returns:
+        JSONResponse: A response indicating whether the password reset was successful or if an error occurred.
+    """
+
+    new_password = password.new_password
+    confirm_password = password.confirm_new_password
+
+    if len(new_password) < 8:
+        raise exceptions.PasswordIsShortException()
+
+    if confirm_password != new_password:
+        raise exceptions.PasswordsDontMatchException()
+
+    user_data = decode_url_safe_token(user_private_key)
+    user_email = user_data.get('email')
+
+    if not user_email:
+        return JSONResponse(
+            content={
+                "message": "Could not reset your password. An error ocurred!",
+            },
+            status_code=500,
+        )
+
+    # Check if user exists
+    user = await service.get_user_email(user_email, session)
+
+    if not user:
+        raise exceptions.UserNotFoundException()
+
+    user_hashed_password = hash_password(new_password)
+    await service.update_user_profile(user, {'password': user_hashed_password}, session)
+    return JSONResponse(
+        content={
+            "message": "Your password was reset successfully!"
+        },
+        status_code=200,
+    )
+
+
 @router.post('/logout', status_code=status.HTTP_200_OK)
 async def logout(token_details: dict = Depends(AccessTokenBearer())):
     """
