@@ -1,8 +1,10 @@
 from datetime import datetime
 from fastapi import Form
 from pydantic import BaseModel, EmailStr, Field, field_validator, StringConstraints
-from typing import Annotated, Optional
+from typing import Annotated, List, Optional
 from uuid import UUID
+
+from ..schemas import BookingResponse, RideResponse
 
 
 validated_mobile_num = Annotated[str, StringConstraints(min_length=10, max_length=15, pattern=r'^\+?[1-9]\d{1,14}$')]
