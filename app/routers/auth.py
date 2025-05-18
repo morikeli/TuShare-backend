@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from fastapi import APIRouter, BackgroundTasks, Depends, File, status, UploadFile
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -6,18 +6,34 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import exceptions
 from ..core.config import Config
-from ..core.dependencies import get_db
+from ..core.dependencies import RoleChecker, get_current_user, get_db
 from ..core.redis import add_token_to_blacklist
-from ..core.token_bearer import AccessTokenBearer
+from ..core.token_bearer import AccessTokenBearer, RefreshTokenBearer
 from ..mails.send_mail import create_message, mail
-from ..schemas import CreateUser, CreatedUserResponse, LoginRequest
-from ..utils.auth import create_access_token, create_url_safe_token, decode_url_safe_token, verify_password
+from ..models import User
+from ..schemas import (
+    ConfirmResetPasswordSchema,
+    CreateUser,
+    CreatedUserResponse,
+    LoginRequest,
+    RequestEmailVerificationSchema,
+    ResetPasswordSchema,
+    UserModel,
+)
+from ..utils.auth import (
+    create_access_token,
+    create_url_safe_token,
+    decode_url_safe_token,
+    hash_password,
+    verify_password,
+)
 from ..services.auth_service import AuthService
 
 
 router = APIRouter()
 service = AuthService()
 REFRESH_TOKEN_EXPIRY = Config.REFRESH_TOKEN_EXPIRY
+user_role = Depends(RoleChecker(["driver", "passenger"]))
 
 
 @router.post("/login", status_code=status.HTTP_200_OK)
