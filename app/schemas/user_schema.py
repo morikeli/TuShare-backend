@@ -78,14 +78,14 @@ class UserProfile(BaseModel):
     date_joined: Optional[datetime] = None
 
     # Convert None to an empty string
-    @field_validator(
-        "first_name", "last_name", "username", "bio", "mobile_number",
-        "facebook_handle", "instagram_handle", "twitter_handle",
-        "work_address", "home_address", "profile_image",
-        mode="before"
-    )
-    def convert_none_to_empty_string(cls, value: Optional[str]) -> str:
-        return "" if value is None else value
+    # @field_validator(
+    #     "first_name", "last_name", "username", "bio", "mobile_number",
+    #     "facebook_handle", "instagram_handle", "twitter_handle",
+    #     "work_address", "home_address", "profile_image",
+    #     mode="before"
+    # )
+    # def convert_none_to_empty_string(cls, value: Optional[str]) -> str:
+    #     return "" if value is None else value
 
     # Convert datetime to string (ISO format)
     @field_validator("date_joined", mode="before")
