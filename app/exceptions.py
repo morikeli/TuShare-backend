@@ -63,6 +63,16 @@ class UserNotFoundException(APIException):
     pass
 
 
+class PasswordIsShortException(APIException):
+    """ Exception is raised when password and confirm password is short. """
+    pass
+
+
+class PasswordsDontMatchException(APIException):
+    """ Exception is raised if the password and confirm password don't match. """
+    pass
+
+
 def create_exception_handler(status_code: int, detail: Any) -> Callable[[Request, Exception], JSONResponse]:
     async def exception_handler(request: Request, exception: APIException):
         return JSONResponse(
