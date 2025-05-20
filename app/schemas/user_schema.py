@@ -96,6 +96,7 @@ class UserProfile(BaseModel):
         from_attributes = True
 
 class UserModel(UserProfile):
+    """ This schema adds rides and bookings in user profile response data. """
     rides: List[RideResponse]
     bookings: List[BookingResponse]
 
