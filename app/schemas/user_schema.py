@@ -51,6 +51,9 @@ class CreateUser(BaseUser):
         )
 
 
+    class Config:
+        from_attributes = True
+
 class CreatedUserResponse(BaseUser):
     id: str
     password: str | None = Field(default=None, exclude=True)
@@ -94,6 +97,7 @@ class UserProfile(BaseModel):
 
     class Config:
         from_attributes = True
+
 
 class UserModel(UserProfile):
     """ This schema adds rides and bookings in user profile response data. """
@@ -153,7 +157,14 @@ class UpdateUserProfile(BaseModel):
         )
 
 
+    class Config:
+        from_attributes = True
+
+
 class UpdateUserProfileResponse(UpdateUserProfile):
     """ Response data when a user updates their profile. """
     id: UUID
 
+
+    class Config:
+        from_attributes = True
