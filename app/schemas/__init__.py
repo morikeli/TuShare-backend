@@ -2,7 +2,7 @@ from .auth_schema import ConfirmResetPasswordSchema, LoginRequest, LoginResponse
 from .booking_schema import BookingResponse, CreateBooking
 from .messages_schema import MessageCreate, MessageResponse
 from .rides_schema import RideCreate, RideResponse
-from .user_schema import CreateUser, CreatedUserResponse, UpdateUserProfile, UserProfile, UserModel
+from .user_schema import CreateUser, CreatedUserResponse, UpdateUserProfile, UpdateUserProfileResponse, UserProfile, UserModel
 
 
 __all__ = [
@@ -29,6 +29,7 @@ __all__ = [
     "CreateUser",
     "CreatedUserResponse",
     "UpdateUserProfile",
+    "UpdateUserProfileResponse",
     "UserModel",
     "UserProfile",
 
