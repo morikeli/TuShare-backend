@@ -102,7 +102,6 @@ class UserModel(UserProfile):
 
 class UpdateUserProfile(BaseModel):
     """ This is a schema to update a user's profile. """
-    id: UUID
     first_name: Optional[str]
     last_name: Optional[str]
     username: Optional[str]
@@ -115,3 +114,45 @@ class UpdateUserProfile(BaseModel):
     home_address: Optional[str]
     bio: Optional[str]
     profile_image: Optional[str] = None
+
+    @classmethod
+    def as_form(
+        cls,
+        first_name: Optional[str] = Form(None),
+        last_name: Optional[str] = Form(None),
+        username: Optional[str] = Form(None),
+        gender: Optional[str] = Form(None),
+        bio: Optional[str] = Form(None),
+        mobile_number: Optional[str] = Form(None),
+        facebook_handle: Optional[str] = Form(None),
+        instagram_handle: Optional[str] = Form(None),
+        twitter_handle: Optional[str] = Form(None),
+        work_address: Optional[str] = Form(None),
+        home_address: Optional[str] = Form(None),
+        profile_image: Optional[str] = Form(None)
+    ):
+        """
+        Converts form data into a Pydantic model instance.
+        This method is used with FastAPI's `Depends()` - in edit profile's router to allow
+        handling form submissions while maintaining model validation.
+        """
+        return cls(
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            gender=gender,
+            bio=bio,
+            mobile_number=mobile_number,
+            facebook_handle=facebook_handle,
+            instagram_handle=instagram_handle,
+            twitter_handle=twitter_handle,
+            work_address=work_address,
+            home_address=home_address,
+            profile_image=profile_image,
+        )
+
+
+class UpdateUserProfileResponse(UpdateUserProfile):
+    """ Response data when a user updates their profile. """
+    id: UUID
+
