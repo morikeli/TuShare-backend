@@ -58,6 +58,41 @@ class BookingNotFoundException(APIException):
     pass
 
 
+class BookingAlreadyExistsException(APIException):
+    """ Exception is thrown when a user tries to book the same ride. """
+    pass
+
+
+class CannotBookRideException(APIException):
+    """ Exception is thrown when the app cannot complete the booking process. """
+    pass
+
+
+
+class DestinationNotFoundException(APIException):
+    """ Exception is thrown when a destination is not found. """
+    pass
+
+
+class RideNotFoundException(APIException):
+    """ Exception is thrown when a ride is not found. """
+    pass
+
+
+class RideAlreadyExistsException(APIException):
+    """ Exception is thrown when a ride already exists. """
+    pass
+
+
+class DriverCannotBookRideException(APIException):
+    """ Exception is thrown when a driver tries to book their own ride. """
+    pass
+
+class NoSeatsLeftException(APIException):
+    """ Exception is thrown when a ride has no available seats left. """
+    pass
+
+
 class UserNotFoundException(APIException):
     """ Exception is thrown when a user is not found. """
     pass
