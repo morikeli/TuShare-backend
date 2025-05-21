@@ -8,14 +8,21 @@ from app.exceptions import (
     create_exception_handler,
     AccessTokenRequiredException,
     AccountNotVerifiedException,
+    BookingAlreadyExistsException,
     BookingNotFoundException,
+    CannotBookRideException,
+    DestinationNotFoundException,
+    DriverCannotBookRideException,
     InvalidTokenException,
     InvalidUserCredentialsException,
+    NoSeatsLeftException,
     PasswordsDontMatchException,
     PasswordIsShortException,
     PermissionRequiredException,
     RefreshTokenRequiredException,
     RevokedTokenException,
+    RideAlreadyExistsException,
+    RideNotFoundException,
     UserAlreadyExistsException,
     UsernameAlreadyExistsException,
     UserNotFoundException,
@@ -94,6 +101,15 @@ app.add_exception_handler(RevokedTokenException,create_exception_handler(401, "T
 app.add_exception_handler(UserAlreadyExistsException, create_exception_handler(409, "User with this email exists!"))
 app.add_exception_handler(UsernameAlreadyExistsException, create_exception_handler(409, "The username is already taken!"))
 app.add_exception_handler(UserNotFoundException, create_exception_handler(404, "User not found."))
+
+
+# ride exception handlers
+app.add_exception_handler(DestinationNotFoundException, create_exception_handler(404, "Destination not found!"))
+app.add_exception_handler(RideNotFoundException, create_exception_handler(404, "Ride not found!"))
+app.add_exception_handler(DriverCannotBookRideException, create_exception_handler(400, "Destination not found!"))
+app.add_exception_handler(NoSeatsLeftException, create_exception_handler(400, "No seats left!"))
+app.add_exception_handler(BookingAlreadyExistsException, create_exception_handler(400, "You have booked this ride!"))
+app.add_exception_handler(CannotBookRideException, create_exception_handler(500, "Could not complete booking process! Please try again later."))
 
 
 @app.exception_handler(Exception)
