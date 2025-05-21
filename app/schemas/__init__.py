@@ -1,7 +1,7 @@
 from .auth_schema import ConfirmResetPasswordSchema, LoginRequest, LoginResponse, RequestEmailVerificationSchema, ResetPasswordSchema
 from .booking_schema import BookingResponse, CreateBooking
 from .messages_schema import MessageCreate, MessageResponse
-from .rides_schema import RideCreate, RideResponse
+from .rides_schema import PassengerResponse, RideCreate, RideResponse
 from .user_schema import CreateUser, CreatedUserResponse, UpdateUserProfile, UpdateUserProfileResponse, UserProfile, UserModel
 
 
@@ -22,6 +22,7 @@ __all__ = [
     "MessageResponse",
 
     # rides schemas
+    "PassengerResponse",
     "RideCreate",
     "RideResponse",
 
