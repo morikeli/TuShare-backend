@@ -79,24 +79,65 @@ http://localhost:8000/api/v1/redoc  # redoc
 ```
 📦project-root
 │
-├── 📄 db
-│   └── 📄 __init__.py
-│   └── 📄 database.py
-│   └── 📄 schemas.py
-│   └── 📄 seed_db.py
+├── 📂 app
+│   └── 📂 core
+|   |   └── 📄 __init__.py
+|   |   └── 📄 config.py
+|   |   └── 📄 database.py
+|   |   └── 📄 dependencies.py
+|   |   └── 📄 redis.py
+|   |   └── 📄 token_bearer.py
+│   └── 📂 mails
+|   |   └── 📄 __init__.py
+|   |   └── 📄 send_mail.py
+│   └── 📂 middleware
+|   |   └── 📄 __init__.py
+|   |   └── 📄 auth_middleware.py
+│   └── 📂 models
+|   |   └── 📄 __init__.py
+|   |   └── 📄 base.py
+|   |   └── 📄 booking.py
+|   |   └── 📄 messages.py
+|   |   └── 📄 rides.py
+|   |   └── 📄 user.py
+│   └── 📂 routers
+|   |   └── 📄 __init__.py
+|   |   └── 📄 auth.py
+|   |   └── 📄 messages.py
+|   |   └── 📄 rides.py
+|   |   └── 📄 users.py
+│   └── 📂 schemas
+|   |   └── 📄 __init__.py
+|   |   └── 📄 auth_schema.py
+|   |   └── 📄 booking_schema.py
+|   |   └── 📄 messages_schema.py
+|   |   └── 📄 rides_schema.py
+|   |   └── 📄 user_schema.py
+│   └── 📂 service
+|   |   └── 📄 __init__.py
+|   |   └── 📄 auth_service.py
+|   |   └── 📄 booking_service.py
+|   |   └── 📄 messages_service.py
+|   |   └── 📄 rides_service.py
+|   |   └── 📄 user_service.py
+│   └── 📂 utils
+|   |   └── 📄 __init__.py
+|   └── 📄 __init__.py
+|   └── 📄 exceptions.py
 ├── 📂 media
 │   └── 📂 dps
-├── 📄 routes
+├── 📄 migrations
+│   └── 📄 
+│   └── 📄 env.py
+│   └── 📄 README.md
+│   └── 📄 script.py.mako
+├── 📄 scripts
 │   └── 📄 __init__.py
-│   └── 📄 messages.py
-│   └── 📄 rides.py
-│   └── 📄 users.py
-├── 📄 schemas
-│   └── 📄 __init__.py
-│   └── 📄 auth_schema.py
-│   └── 📄 messages_schema.py
-│   └── 📄 rides_schema.py
-│   └── 📄 users_schema.py
+│   └── 📄 seed_db.py
+├── 📄 templates
+│   └── 📄 email-verification.html
+│   └── 📄 reset-password.html
+|
 ├── 📄 .env
 ├── 📄 .gitignore
 ├── ⚙️ alembic.ini
