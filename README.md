@@ -126,7 +126,7 @@ http://localhost:8000/api/v1/redoc  # redoc
 |   └── 📄 exceptions.py
 ├── 📂 media
 │   └── 📂 dps
-├── 📄 migrations
+├── 📂 migrations
 │   └── 📂 versions
 │   └── 📄 env.py
 │   └── 📄 README.md
