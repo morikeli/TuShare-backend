@@ -127,7 +127,7 @@ http://localhost:8000/api/v1/redoc  # redoc
 ├── 📂 media
 │   └── 📂 dps
 ├── 📄 migrations
-│   └── 📄 
+│   └── 📂 versions
 │   └── 📄 env.py
 │   └── 📄 README.md
 │   └── 📄 script.py.mako
