@@ -126,7 +126,7 @@ async def create_user(
 
     # email verification
     private_key = create_url_safe_token({"email": new_user.email})
-    email_verification_link = f"http://{Config.DOMAIN}/api/v1/auth/verify-account/{private_key}"
+    email_verification_link = f"{Config.DOMAIN}/api/v1/auth/verify-account/{private_key}"
 
     message = create_message(
         recipients=[new_user.email],
@@ -182,7 +182,7 @@ async def request_email_verification_link(
 
     # Create signed token
     token = create_url_safe_token({"email": email})
-    verification_link = f"http://{Config.DOMAIN}/api/v1/auth/verify-account/{token}"
+    verification_link = f"{Config.DOMAIN}/api/v1/auth/verify-account/{token}"
 
     # Send email
     message = create_message(
@@ -314,7 +314,7 @@ async def reset_password(user_email: ResetPasswordSchema, bg_task: BackgroundTas
     email = user_email.email
 
     private_key = create_url_safe_token({"email": email})
-    reset_password_link = f"http://{Config.DOMAIN}/api/v1/auth/confirm-reset-password/{private_key}"
+    reset_password_link = f"{Config.DOMAIN}/api/v1/auth/confirm-reset-password/{private_key}"
 
     message = create_message(
         recipients=[email],
