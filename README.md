@@ -169,5 +169,7 @@ If you encounter any issues, please create an issue [here](https://github.com/mo
 
 ---
 
+> Made with ♥️. Don't hit the star button ⭐ to star this repo
+
 ✨ Happy Coding! 🚀
 
