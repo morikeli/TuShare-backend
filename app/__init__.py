@@ -88,28 +88,32 @@ app.include_router(msg_router, prefix=f'/api/{api_version}', tags=["Messages"])
 
 
 # register custom exceptions
+
+# auth-related exception handlers
 app.add_exception_handler(AccessTokenRequiredException, create_exception_handler(403, "Authentication required!"))
 app.add_exception_handler(AccountNotVerifiedException, create_exception_handler(403, "Please check your email and verify your account to use the app."))
-app.add_exception_handler(BookingNotFoundException, create_exception_handler(404, "Booking not found!"))
+app.add_exception_handler(PermissionRequiredException, create_exception_handler(403, "You don't have permission to access this resource."))
+app.add_exception_handler(RefreshTokenRequiredException, create_exception_handler(401, "Please provide a refresh token."))
+app.add_exception_handler(RevokedTokenException,create_exception_handler(401, "This token was revoked! Please login again."))
 app.add_exception_handler(InvalidTokenException, create_exception_handler(401, "Invalid to expired token provided!"))
 app.add_exception_handler(InvalidUserCredentialsException, create_exception_handler(400, "Invalid user credentials."))
 app.add_exception_handler(PasswordsDontMatchException, create_exception_handler(400, "Passwords don't match!"))
 app.add_exception_handler(PasswordIsShortException, create_exception_handler(400, "Password is too short!"))
-app.add_exception_handler(PermissionRequiredException, create_exception_handler(403, "You don't have permission to access this resource."))
-app.add_exception_handler(RefreshTokenRequiredException, create_exception_handler(401, "Please provide a refresh token."))
-app.add_exception_handler(RevokedTokenException,create_exception_handler(401, "This token was revoked! Please login again."))
-app.add_exception_handler(UserAlreadyExistsException, create_exception_handler(409, "User with this email exists!"))
-app.add_exception_handler(UsernameAlreadyExistsException, create_exception_handler(409, "The username is already taken!"))
-app.add_exception_handler(UserNotFoundException, create_exception_handler(404, "User not found."))
-
 
 # ride exception handlers
+app.add_exception_handler(BookingNotFoundException, create_exception_handler(404, "Booking not found!"))
 app.add_exception_handler(DestinationNotFoundException, create_exception_handler(404, "Destination not found!"))
 app.add_exception_handler(RideNotFoundException, create_exception_handler(404, "Ride not found!"))
 app.add_exception_handler(DriverCannotBookRideException, create_exception_handler(400, "Destination not found!"))
 app.add_exception_handler(NoSeatsLeftException, create_exception_handler(400, "No seats left!"))
 app.add_exception_handler(BookingAlreadyExistsException, create_exception_handler(400, "You have booked this ride!"))
 app.add_exception_handler(CannotBookRideException, create_exception_handler(500, "Could not complete booking process! Please try again later."))
+
+
+# user-related exception handlers
+app.add_exception_handler(UserAlreadyExistsException, create_exception_handler(409, "User with this email exists!"))
+app.add_exception_handler(UsernameAlreadyExistsException, create_exception_handler(409, "The username is already taken!"))
+app.add_exception_handler(UserNotFoundException, create_exception_handler(404, "User not found."))
 
 
 @app.exception_handler(Exception)
