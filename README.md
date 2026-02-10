@@ -77,7 +77,7 @@ http://localhost:8000/api/v1/redoc  # redoc
 ## 🗂️ Project structure
 
 ```
-📦project-root
+📦 root dir
 │
 ├── 📂 app
 │   └── 📂 core
@@ -131,10 +131,10 @@ http://localhost:8000/api/v1/redoc  # redoc
 │   └── 📄 env.py
 │   └── 📄 README.md
 │   └── 📄 script.py.mako
-├── 📄 scripts
+├── 📂 scripts
 │   └── 📄 __init__.py
 │   └── 📄 seed_db.py
-├── 📄 templates
+├── 📂 templates
 │   └── 📄 email-verification.html
 │   └── 📄 reset-password.html
 |
