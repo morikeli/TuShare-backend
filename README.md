@@ -141,14 +141,8 @@ http://localhost:8000/api/v1/redoc  # redoc
 ├── 📄 .env
 ├── 📄 .gitignore
 ├── ⚙️ alembic.ini
-├── 📄 auth.py
-├── 📄 config.py
-├── 📄 __init__.py
-├── 📄 main.py
-├── 📄 models.py
-└── 📄 README.md
-├── 📄 requirements.txt
-├── 📄 utils.py
+├── 📄 README.md
+└── 📄 requirements.txt
 ```
 
 ---
