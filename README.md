@@ -165,7 +165,7 @@ If you encounter any issues, please create an issue [here](https://github.com/mo
 
 > [!IMPORTANT]
 >
-> Made with ♥️. Don't hit the star button ⭐ to star this repo
+> Made with ♥️. Don't forget to hit the star button ⭐ to star this repo
 
 ✨ Happy Coding! 🚀
 
